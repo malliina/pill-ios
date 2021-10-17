@@ -19,8 +19,25 @@ class PillTests: XCTestCase {
     }
 
     func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        let cal = Calendar.current
+        var dateComponents = DateComponents()
+        dateComponents.year = 2021
+        dateComponents.month = 7
+        dateComponents.day = 11
+        dateComponents.hour = 8
+        dateComponents.minute = 34
+        let date = cal.date(from: dateComponents) ?? Date()
+        let halt = Halt.nthWeek(NthSpec(start: date, nth: 2))
+        let inThreeDays = cal.date(byAdding: .day, value: 6, to: date) ?? date
+        XCTAssert(!halt.isHalted(date: inThreeDays))
+        let inOneWeek = cal.date(byAdding: .day, value: 7, to: date) ?? date
+        XCTAssert(halt.isHalted(date: inOneWeek))
+        let inTenDays = cal.date(byAdding: .day, value: 10, to: date) ?? date
+        XCTAssert(halt.isHalted(date: inTenDays))
+        let inTwoWeeks = cal.date(byAdding: .day, value: 14, to: date) ?? date
+        XCTAssert(!halt.isHalted(date: inTwoWeeks))
+        let inThreeWeeks = cal.date(byAdding: .day, value: 21, to: date) ?? date
+        XCTAssert(halt.isHalted(date: inThreeWeeks))
     }
 
     func testPerformanceExample() throws {

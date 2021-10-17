@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct PillApp: App {
+    @StateObject private var data = Data()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ReminderList().environmentObject(data)
         }
     }
 }
