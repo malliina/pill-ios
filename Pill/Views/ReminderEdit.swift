@@ -49,10 +49,11 @@ struct ReminderEdit: View {
     static let dateFormatter = Dates.current.formatter()
     
     func onTestNow() {
-        Notifications.current.request()
-        let date = calendar.date(byAdding: .second, value: 1, to: Date()) ?? Date()
-        let when = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
-        Notifications.current.scheduleOnce(title: "Test reminder", body: reminder.name, at: when)
+        Notifications.current.request {
+            let date = calendar.date(byAdding: .second, value: 1, to: Date()) ?? Date()
+            let when = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+            Notifications.current.scheduleOnce(title: "Test reminder", body: reminder.name, at: when)
+        }
     }
     var dateText: String { reminder.whenInterval == .none ? "Date" : "Starting" }
     

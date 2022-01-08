@@ -33,6 +33,7 @@ struct ReminderList: View {
                         if let idx = idx {
                             data.reminders[idx] = r
                         }
+                        RemindersStore.save(data.reminders)
                     }) {
                         ReminderRow(reminder: reminder)
                     }
@@ -40,17 +41,12 @@ struct ReminderList: View {
             }.navigationTitle("The Pill")
         }
         .navigationViewStyle(.stack)
-        .onAppear {
-            RemindersStore.load { reminders in
-                self.log.info("Loaded \(reminders.count) reminders.")
-                data.reminders = reminders
-            }
-        }.sheet(isPresented: $isAddingNewView) {
+        .sheet(isPresented: $isAddingNewView) {
             NavigationView {
                 ReminderEdit(reminder: MutableReminder.create(), isNew: true) { r in
                     log.info("Save new \(r.name)")
                     data.reminders.append(r)
-                    
+                    RemindersStore.save(data.reminders)
                 }
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
@@ -58,18 +54,22 @@ struct ReminderList: View {
                             onDoneAdding()
                         }
                     }
-//                    ToolbarItem(placement: .confirmationAction) {
-//                        Button("Add") {
-//                            data.reminders.append(newReminder.immutable)
-//                            onDoneAdding()
-//                        }.disabled(newReminder.name.isEmpty)
-//                    }
                 }
             }
         }
+        .onAppear {
+            RemindersStore.load { reminders in
+                self.log.info("Loaded \(reminders.count) reminders.")
+                data.reminders = reminders
+            }
+        }
         .onChange(of: scenePhase) { phase in
+            log.info("Phase \(phase)")
             if phase == .inactive {
-                RemindersStore.save(data.reminders)
+                // fix: when resuming app, this saves because the resume scenes are:
+                // background -> inactive -> active
+//                log.info("Saving due to inactive scene phase...")
+//                RemindersStore.save(data.reminders)
             }
         }
     }

@@ -31,7 +31,7 @@ class PillSettings {
             readKey(remindersKey, to: Reminders.self)?.reminders ?? []
         }
         set(rs) {
-            write(rs, toKey: remindersKey)
+            write(Reminders(reminders: rs), toKey: remindersKey)
         }
     }
     
@@ -40,9 +40,11 @@ class PillSettings {
             do {
                 return try read(to, data: str)
             } catch {
+                log.error("Failed to read \(key). \(error)")
                 return nil
             }
         } else {
+            log.info("Nothing saved with key \(key).")
             return nil
         }
     }
@@ -57,6 +59,7 @@ class PillSettings {
             let data = try encoder.encode(t)
             let str = String(data: data, encoding: .utf8)
             prefs.set(str, forKey: toKey)
+            log.info("Saved \(str) to \(toKey)")
         } catch let error {
             log.error("Failed to save key '\(toKey)'. \(error)")
         }

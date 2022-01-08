@@ -20,19 +20,27 @@ class Notifications: NSObject, UNUserNotificationCenterDelegate {
         center.delegate = NotificationsDelegate.current
     }
     
-    func request() {
-        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            let log = self.log
-            if let error = error {
-                log.error("Failed to request authorization to send notifications. \(error)")
-            }
-            if granted {
-                log.info("Authorization to send notifications granted.")
-//                self.schedule()
-            } else {
-                log.info("Authorization to send notifications denied.")
+    func request(onAuthorized: @escaping () -> Void) {
+        center.getNotificationSettings { settings in
+            switch settings.authorizationStatus {
+            case .denied: ()
+            case .notDetermined:
+                self.center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+                    let log = self.log
+                    if let error = error {
+                        log.error("Failed to request authorization to send notifications. \(error)")
+                    }
+                    if granted {
+                        log.info("Authorization to send notifications granted.")
+                        onAuthorized()
+                    } else {
+                        log.info("Authorization to send notifications denied.")
+                    }
+                }
+            default: onAuthorized()
             }
         }
+        
     }
     
     func scheduleOnce(title: String, body: String, at date: DateComponents) {
