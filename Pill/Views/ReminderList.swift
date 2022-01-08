@@ -8,22 +8,74 @@
 import SwiftUI
 
 struct ReminderList: View {
-    @EnvironmentObject var data: Data
+    let log = LoggerFactory.shared.system(ReminderList.self)
+    @EnvironmentObject var data: RemindersStore
     @State private var showingProfile = false
+    @State private var isAddingNewView = false
+    @Environment(\.scenePhase) private var scenePhase
+    
+    func onAddNew() {
+        isAddingNewView = true
+    }
     
     var body: some View {
         NavigationView {
             List {
-                NavigationLink(destination: ReminderEdit(reminder: MutableReminder.create())) {
+                Button(action: onAddNew) {
                     Label("Add Reminder", systemImage: "calendar.badge.plus")
                 }
                 ForEach(data.reminders) { reminder in
-                    NavigationLink(destination: ReminderEdit(reminder: reminder.mutable)) {
+                    NavigationLink(destination: ReminderEdit(reminder: reminder.mutable, isNew: false) { r in
+                        log.info("Save edited \(r.name).")
+                        let idx = data.reminders.firstIndex { rem in
+                            rem.id == r.id
+                        }
+                        if let idx = idx {
+                            data.reminders[idx] = r
+                        }
+                    }) {
                         ReminderRow(reminder: reminder)
                     }
                 }
             }.navigationTitle("The Pill")
-        }.navigationViewStyle(.stack)
+        }
+        .navigationViewStyle(.stack)
+        .onAppear {
+            RemindersStore.load { reminders in
+                self.log.info("Loaded \(reminders.count) reminders.")
+                data.reminders = reminders
+            }
+        }.sheet(isPresented: $isAddingNewView) {
+            NavigationView {
+                ReminderEdit(reminder: MutableReminder.create(), isNew: true) { r in
+                    log.info("Save new \(r.name)")
+                    data.reminders.append(r)
+                    
+                }
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Dismiss") {
+                            onDoneAdding()
+                        }
+                    }
+//                    ToolbarItem(placement: .confirmationAction) {
+//                        Button("Add") {
+//                            data.reminders.append(newReminder.immutable)
+//                            onDoneAdding()
+//                        }.disabled(newReminder.name.isEmpty)
+//                    }
+                }
+            }
+        }
+        .onChange(of: scenePhase) { phase in
+            if phase == .inactive {
+                RemindersStore.save(data.reminders)
+            }
+        }
+    }
+    
+    func onDoneAdding() {
+        isAddingNewView = false
     }
 }
 
@@ -33,7 +85,7 @@ struct ReminderList_Previews: PreviewProvider {
             ReminderList()
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
-                .environmentObject(Data())
+                .environmentObject(RemindersStore())
         }
     }
 }

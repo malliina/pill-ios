@@ -15,7 +15,7 @@
 		7D20940726FF5DC000F24FBD /* PillUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D20940626FF5DC000F24FBD /* PillUITests.swift */; };
 		7D20940926FF5DC000F24FBD /* PillUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D20940826FF5DC000F24FBD /* PillUITestsLaunchTests.swift */; };
 		7D20941726FF60CC00F24FBD /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D20941626FF60CC00F24FBD /* Models.swift */; };
-		7D20941926FF64A500F24FBD /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D20941826FF64A500F24FBD /* Data.swift */; };
+		7D20941926FF64A500F24FBD /* RemindersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D20941826FF64A500F24FBD /* RemindersStore.swift */; };
 		7D20941C26FF65C700F24FBD /* ReminderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D20941B26FF65C700F24FBD /* ReminderRow.swift */; };
 		7D20941E26FF68CB00F24FBD /* ReminderEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D20941D26FF68CB00F24FBD /* ReminderEdit.swift */; };
 		7D5996D52719E9710062FDAF /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5996D42719E9710062FDAF /* Notifications.swift */; };
@@ -56,7 +56,7 @@
 		7D20940626FF5DC000F24FBD /* PillUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillUITests.swift; sourceTree = "<group>"; };
 		7D20940826FF5DC000F24FBD /* PillUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		7D20941626FF60CC00F24FBD /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
-		7D20941826FF64A500F24FBD /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		7D20941826FF64A500F24FBD /* RemindersStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersStore.swift; sourceTree = "<group>"; };
 		7D20941B26FF65C700F24FBD /* ReminderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderRow.swift; sourceTree = "<group>"; };
 		7D20941D26FF68CB00F24FBD /* ReminderEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEdit.swift; sourceTree = "<group>"; };
 		7D5996D42719E9710062FDAF /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
@@ -157,7 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				7D20941626FF60CC00F24FBD /* Models.swift */,
-				7D20941826FF64A500F24FBD /* Data.swift */,
+				7D20941826FF64A500F24FBD /* RemindersStore.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -165,11 +165,11 @@
 		7D20941A26FF65AC00F24FBD /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				7D2093ED26FF5DBC00F24FBD /* ReminderList.swift */,
-				7DE6FFAF271C4D3E009B77F0 /* WeekDaysSelector.swift */,
-				7D20941B26FF65C700F24FBD /* ReminderRow.swift */,
-				7D20941D26FF68CB00F24FBD /* ReminderEdit.swift */,
 				7DE6FFB1271C51AF009B77F0 /* DaysOfMonthSelector.swift */,
+				7D20941D26FF68CB00F24FBD /* ReminderEdit.swift */,
+				7D2093ED26FF5DBC00F24FBD /* ReminderList.swift */,
+				7D20941B26FF65C700F24FBD /* ReminderRow.swift */,
+				7DE6FFAF271C4D3E009B77F0 /* WeekDaysSelector.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -177,8 +177,8 @@
 		7D5996D32718B0350062FDAF /* System */ = {
 			isa = PBXGroup;
 			children = (
-				7D5996D42719E9710062FDAF /* Notifications.swift */,
 				7D5996D62719EB700062FDAF /* Log.swift */,
+				7D5996D42719E9710062FDAF /* Notifications.swift */,
 				7DE6FFAD271B10C3009B77F0 /* PillSettings.swift */,
 			);
 			path = System;
@@ -320,7 +320,7 @@
 				7D5996D52719E9710062FDAF /* Notifications.swift in Sources */,
 				7D20941C26FF65C700F24FBD /* ReminderRow.swift in Sources */,
 				7DE6FFB2271C51AF009B77F0 /* DaysOfMonthSelector.swift in Sources */,
-				7D20941926FF64A500F24FBD /* Data.swift in Sources */,
+				7D20941926FF64A500F24FBD /* RemindersStore.swift in Sources */,
 				7D20941E26FF68CB00F24FBD /* ReminderEdit.swift in Sources */,
 				7DE6FFB0271C4D3E009B77F0 /* WeekDaysSelector.swift in Sources */,
 				7D2093EE26FF5DBC00F24FBD /* ReminderList.swift in Sources */,

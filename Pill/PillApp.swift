@@ -9,11 +9,11 @@ import SwiftUI
 
 @main
 struct PillApp: App {
-    @StateObject private var data = Data()
+    @StateObject private var store = RemindersStore()
     
     var body: some Scene {
         WindowGroup {
-            ReminderList().environmentObject(data)
+            ReminderList().environmentObject(store)
         }
     }
 }

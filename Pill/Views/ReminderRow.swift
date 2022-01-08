@@ -34,7 +34,7 @@ struct ReminderRow: View {
 }
 
 struct ReminderRow_Previews: PreviewProvider {
-    static var reminders = Data().reminders
+    static var reminders = RemindersStore().reminders
     static var previews: some View {
         Group {
             ReminderRow(reminder: reminders[0])

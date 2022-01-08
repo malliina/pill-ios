@@ -36,8 +36,13 @@ extension Interval {
 }
 
 struct ReminderEdit: View {
+    let log = LoggerFactory.shared.system(ReminderEdit.self)
     @Environment(\.editMode) var editMode
+    @Environment(\.dismiss) var dismiss
     @State var reminder: MutableReminder
+    
+    let isNew: Bool
+    let onSave: (Reminder) -> Void
     
     let calendar = Calendar.current
     var start: Date { reminder.start }
@@ -105,13 +110,24 @@ struct ReminderEdit: View {
                 Text(ReminderEdit.dateFormatter.string(from: date))
             }
         }
+        .navigationTitle("Edit")
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Save") {
+                    onSave(reminder.immutable)
+                    dismiss()
+                }
+            }
+        }
     }
 }
 
 struct ReminderEdit_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ReminderEdit(reminder: Data().reminders[0].mutable)
+            ReminderEdit(reminder: RemindersStore.sampleReminders[0].mutable, isNew: true) { _ in
+                
+            }
         }
     }
 }
