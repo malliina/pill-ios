@@ -59,7 +59,11 @@ class PillSettings {
             let data = try encoder.encode(t)
             let str = String(data: data, encoding: .utf8)
             prefs.set(str, forKey: toKey)
-            log.info("Saved \(str) to \(toKey)")
+            if let str = str {
+                log.info("Saved \(str) to \(toKey)")
+            } else {
+                log.info("Saved nil to \(toKey)")
+            }
         } catch let error {
             log.error("Failed to save key '\(toKey)'. \(error)")
         }

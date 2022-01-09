@@ -10,7 +10,7 @@ import Foundation
 final class RemindersStore: ObservableObject {
     static let log = LoggerFactory.shared.system(RemindersStore.self)
     
-    @Published var reminders: [Reminder] = [] // Pill.PillSettings.shared.reminders
+    @Published var reminders: [Reminder] = []
     
     static func load(completion: ([Reminder]) -> Void) {
         completion(Pill.PillSettings.shared.reminders)
@@ -19,10 +19,7 @@ final class RemindersStore: ObservableObject {
     static func save(_ newReminders: [Reminder]) {
         Pill.PillSettings.shared.reminders = newReminders
         log.info("Saved \(newReminders.count) reminders.")
-//        reminders = newReminders
     }
-    
-//    static func 
     
     static let sampleReminders: [Reminder] = [
         Reminder(id: "1", enabled: true, name: "My daily reminder", when: When.daily(WeekDay.allCases, Time(hour: 15, minute: 48)), halt: Halt.nthWeek(NthSpec(start: Date(), nth: 2)), start: Date()),

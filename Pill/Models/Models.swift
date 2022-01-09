@@ -64,7 +64,7 @@ enum Interval: String, CaseIterable, Codable, Identifiable {
 enum HaltInterval: String, CaseIterable, Codable, Identifiable {
     case none
     case nthWeek
-    case monthly
+    case nthMonth
     var id: String { self.rawValue }
 }
 
@@ -107,19 +107,21 @@ struct NthSpec: Codable {
 }
 
 enum Halt: Codable {
-    case nthWeek(NthSpec), months([Int])
+    case nthWeek(NthSpec), nthMonth(NthSpec)//, months([Int])
     
     var interval: HaltInterval {
         switch self {
         case .nthWeek(_): return .nthWeek
-        case .months(_): return .monthly
+        case .nthMonth(_): return .nthMonth
+//        case .months(_): return .monthly
         }
     }
     
     var nth: Int? {
         switch self {
         case .nthWeek(let spec): return spec.nth
-        default: return nil
+        case .nthMonth(let spec): return spec.nth
+//        default: return nil
         }
     }
     
@@ -134,8 +136,16 @@ enum Halt: Codable {
             let remainder = ((days / 7) + 1) % spec.nth
 //            print("Days \(days) weeks \(days / 7) r1 \(12 % 2) remainder \(remainder) from \(from) to \(to)")
             return remainder == 0
-        default:
-            return false
+        case .nthMonth(let spec):
+            let calendar = Calendar.current
+            let from = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: spec.start) ?? spec.start
+            let to = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: date) ?? date
+            let daysComponents = calendar.dateComponents([.month], from: from, to: to)
+            let months = daysComponents.value(for: .month) ?? 0
+            let remainder = (months + 1) % spec.nth
+            return remainder == 0
+//        default:
+//            return false
         }
     }
 }
@@ -157,7 +167,7 @@ extension Date {
 struct MutableReminder {
 //    static let empty: MutableReminder = Reminder(id: UUID().uuidString, enabled: true, name: "", when: When.daily(WeekDay.allCases, Time(hour: 8, minute: 15)), halt: nil, start: Date()).mutable
     static func create() -> MutableReminder {
-        let reminder = Reminder(id: UUID().uuidString, enabled: true, name: "", when: When.once(Date()), halt: nil, start: Date())
+        let reminder = Reminder(id: UUID().uuidString, enabled: true, name: "", when: When.once(Date().addingTimeInterval(300)), halt: nil, start: Date())
         return reminder.mutable
     }
     let log = LoggerFactory.shared.system(MutableReminder.self)
@@ -177,6 +187,10 @@ struct MutableReminder {
         let cal = Calendar.current
         let time = timeAsDate.time
         switch whenInterval {
+        case .none:
+            let date = cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from) ?? from
+            let now = Date()
+            return date > now ? [date] : []
         case .daily:
             let today = cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from) ?? from
             let tomorrow = cal.date(byAdding: .day, value: 1, to: today) ?? from
@@ -196,8 +210,28 @@ struct MutableReminder {
             } else {
                 return batch
             }
-        default:
-            return []
+        case .monthly:
+            let startCandidate = cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from) ?? from
+            let now = Date()
+            if now > startCandidate {
+                guard let nextCandidate = cal.date(byAdding: .month, value: 1, to: startCandidate) else { return [] }
+                return upcoming(from: nextCandidate, limit: limit)
+            } else {
+                let range = 0..<limit
+                let potentialMonths = range.compactMap { i in
+                    cal.date(byAdding: .month, value: i, to: startCandidate)
+                }
+                let halt = asHalt()
+                let batch = potentialMonths.filter { date in
+                    !(halt?.isHalted(date: date) ?? false)
+                }
+                if let mostDistant = potentialMonths.last, batch.count < limit, let nextFrom = cal.date(byAdding: .month, value: 1, to: mostDistant) {
+                    log.info("Recurse after batch \(batch.count) remaining \(limit-batch.count) from \(mostDistant)")
+                    return batch + upcoming(from: nextFrom, limit: limit - batch.count)
+                } else {
+                    return batch
+                }
+            }
         }
     }
     
@@ -207,8 +241,8 @@ struct MutableReminder {
             return nil
         case .nthWeek:
             return Halt.nthWeek(NthSpec(start: start, nth: haltNth))
-        case .monthly:
-            return nil
+        case .nthMonth:
+            return Halt.nthMonth(NthSpec(start: start, nth: haltNth))
         }
     }
     

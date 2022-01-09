@@ -18,6 +18,13 @@ struct ReminderList: View {
         isAddingNewView = true
     }
     
+    func onDelete(_ r: Reminder) {
+        data.reminders.removeAll { elem in
+            elem.id == r.id
+        }
+        RemindersStore.save(data.reminders)
+    }
+    
     var body: some View {
         NavigationView {
             List {
@@ -34,8 +41,12 @@ struct ReminderList: View {
                             data.reminders[idx] = r
                         }
                         RemindersStore.save(data.reminders)
-                    }) {
+                    } delete: { r in onDelete(r) }) {
                         ReminderRow(reminder: reminder)
+                    }.swipeActions {
+                        Button(role: .destructive) { onDelete(reminder) } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
                     }
                 }
             }.navigationTitle("The Pill")
@@ -47,7 +58,7 @@ struct ReminderList: View {
                     log.info("Save new \(r.name)")
                     data.reminders.append(r)
                     RemindersStore.save(data.reminders)
-                }
+                } delete: { r in log.info("Unused") }
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button("Dismiss") {
@@ -66,10 +77,8 @@ struct ReminderList: View {
         .onChange(of: scenePhase) { phase in
             log.info("Phase \(phase)")
             if phase == .inactive {
-                // fix: when resuming app, this saves because the resume scenes are:
+                // when resuming app, the resume scenes are:
                 // background -> inactive -> active
-//                log.info("Saving due to inactive scene phase...")
-//                RemindersStore.save(data.reminders)
             }
         }
     }
