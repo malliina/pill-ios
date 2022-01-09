@@ -26,8 +26,14 @@ struct ReminderRow: View {
             return "\(formattedDate)"
         case .daily(_, let time):
             return "Daily at \(time.describe)"
-        case .monthly(_, _):
+        case .monthly(_):
             return "Monthly"
+        case .daysOfMonth(let days, _):
+            let str = days.map { i in
+                "\(i)"
+            }.joined(separator: ", ")
+            let word = days.count > 1 ? "Days" : "Day"
+            return "\(word) \(str) of month"
         }
     }
 

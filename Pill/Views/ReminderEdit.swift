@@ -33,6 +33,7 @@ extension Interval {
         case .none: return "never"
         case .daily: return "daily"
         case .monthly: return "monthly"
+        case .daysOfMonth: return "days of month"
         }
     }
 }
@@ -86,7 +87,7 @@ struct ReminderEdit: View {
                         Label("Select weekdays", systemImage: "calendar.badge.plus")
                     }
                 }
-                if reminder.whenInterval == .monthly {
+                if reminder.whenInterval == .daysOfMonth {
                     NavigationLink(destination: DaysOfMonthSelector(monthDays: $reminder.whenDaysOfMonth)) {
                         Label("Select days of month", systemImage: "calendar.badge.plus")
                     }

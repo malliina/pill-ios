@@ -46,6 +46,7 @@ enum Interval: String, CaseIterable, Codable, Identifiable {
     case daily
 //    case weekly
     case monthly
+    case daysOfMonth
     
 //    var all: [Interval] { [Interval.none, Interval.daily, Interval.weekly, Interval.monthly] }
 //    var timed(at: Time): When {
@@ -69,34 +70,38 @@ enum HaltInterval: String, CaseIterable, Codable, Identifiable {
 }
 
 enum When: Codable {
-    case once(Date), daily([WeekDay], Time), monthly([Int], Time)
+    case once(Date), daily([WeekDay], Time), monthly(Time), daysOfMonth([Int], Time)
     
     var interval: Interval {
         switch self {
         case .once(_): return .none
         case .daily(_, _): return .daily
-        case .monthly(_, _): return .monthly
+        case .monthly(_): return .monthly
+        case .daysOfMonth(_, _): return .daysOfMonth
         }
     }
     var time: Time {
         switch self {
         case .once(let date): return date.time
         case .daily(_, let t): return t
-        case .monthly(_, let t): return t
+        case .monthly(let t): return t
+        case .daysOfMonth(_, let t): return t
         }
     }
     var weekDays: [WeekDay]? {
         switch self {
         case .once(_): return nil
         case .daily(let days, _): return days
-        case .monthly(_, _): return nil
+        case .monthly(_): return nil
+        case .daysOfMonth(_, _): return nil
         }
     }
     var monthDays: [Int]? {
         switch self {
         case .once(_): return nil
         case .daily(_, _): return nil
-        case .monthly(let days, _): return days
+        case .monthly(_): return nil
+        case .daysOfMonth(let days, _): return days
         }
     }
 }
@@ -134,7 +139,6 @@ enum Halt: Codable {
             let daysComponents = calendar.dateComponents([.day], from: from, to: to)
             let days = daysComponents.value(for: .day) ?? 0
             let remainder = ((days / 7) + 1) % spec.nth
-//            print("Days \(days) weeks \(days / 7) r1 \(12 % 2) remainder \(remainder) from \(from) to \(to)")
             return remainder == 0
         case .nthMonth(let spec):
             let calendar = Calendar.current
@@ -144,8 +148,6 @@ enum Halt: Codable {
             let months = daysComponents.value(for: .month) ?? 0
             let remainder = (months + 1) % spec.nth
             return remainder == 0
-//        default:
-//            return false
         }
     }
 }
@@ -226,11 +228,36 @@ struct MutableReminder {
                     !(halt?.isHalted(date: date) ?? false)
                 }
                 if let mostDistant = potentialMonths.last, batch.count < limit, let nextFrom = cal.date(byAdding: .month, value: 1, to: mostDistant) {
-                    log.info("Recurse after batch \(batch.count) remaining \(limit-batch.count) from \(mostDistant)")
+//                    log.info("Recurse after batch \(batch.count) remaining \(limit-batch.count) from \(mostDistant)")
                     return batch + upcoming(from: nextFrom, limit: limit - batch.count)
                 } else {
                     return batch
                 }
+            }
+        case .daysOfMonth:
+            let today = cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from) ?? from
+            let tomorrow = cal.date(byAdding: .day, value: 1, to: today) ?? from
+            // If equal, take next day, prob recursion
+            let next = from < today ? today : tomorrow
+            let range = 0..<limit
+            let potentialDays = range.compactMap { i in
+                cal.date(byAdding: .day, value: i, to: next)
+            }.filter { date in
+                let daysComponents = cal.dateComponents([.day], from: date)
+                let day = daysComponents.value(for: .day) ?? 0
+                return whenDaysOfMonth.filter { $0.isSelected }.contains { doms in
+                    return doms.day == day
+                }
+            }
+            let halt = asHalt()
+            let batch = potentialDays.filter { date in
+                !(halt?.isHalted(date: date) ?? false)
+            }
+            if batch.count < limit, let nextFrom = cal.date(byAdding: .day, value: 1, to: potentialDays.last ?? from) {
+//                log.info("Recurse after batch \(batch.count) remaining \(limit-batch.count) from \(nextFrom)")
+                return batch + upcoming(from: nextFrom, limit: limit - batch.count)
+            } else {
+                return batch
             }
         }
     }
@@ -254,12 +281,14 @@ struct MutableReminder {
             let days = whenWeekDays.filter({ day in day.isSelected }).map({ day in day.day })
             return When.daily(days, timeAsDate.time)
         case .monthly:
+            return When.monthly(timeAsDate.time)
+        case .daysOfMonth:
             let daysOfMonth = whenDaysOfMonth.filter({ dayOfMonth in
                 dayOfMonth.isSelected
             }).map({ dayOfMonth in
                 dayOfMonth.day
             })
-            return When.monthly(daysOfMonth, timeAsDate.time)
+            return When.daysOfMonth(daysOfMonth, timeAsDate.time)
         }
     }
     
