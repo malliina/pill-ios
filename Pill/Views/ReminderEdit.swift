@@ -79,7 +79,8 @@ struct ReminderEdit: View {
             return "All days"
         } else if selected.count < 7 {
             let daysDescribed = selected.map { "\($0)" }.joined(separator: ", ")
-            return "Days \(daysDescribed) of month"
+            let prefix = selected.count == 1 ? "Day" : "Days"
+            return "\(prefix) \(daysDescribed) of month"
         } else {
             return "\(selected.count) days of month"
         }
