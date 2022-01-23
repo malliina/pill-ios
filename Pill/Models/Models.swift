@@ -15,6 +15,7 @@ enum WeekDay: String, CaseIterable, Codable, Identifiable {
     case fri = "Friday"
     case sat = "Saturday"
     case sun = "Sunday"
+    
     var id: String { self.rawValue }
     var short: String {
         switch self {
@@ -25,6 +26,20 @@ enum WeekDay: String, CaseIterable, Codable, Identifiable {
         case .fri: return "Fri"
         case .sat: return "Sat"
         case .sun: return "Sun"
+        }
+    }
+    
+    // https://developer.apple.com/documentation/foundation/nsdatecomponents/1410442-weekday
+    static func gregorian(cal: Calendar, date: Date) throws -> WeekDay {
+        switch cal.component(.weekday, from: date) {
+        case 1: return sun
+        case 2: return mon
+        case 3: return tue
+        case 4: return wed
+        case 5: return thu
+        case 6: return fri
+        case 7: return sat
+        default: throw PillError.general("Invalid weekday value.")
         }
     }
 }
@@ -112,13 +127,12 @@ struct NthSpec: Codable {
 }
 
 enum Halt: Codable {
-    case nthWeek(NthSpec), nthMonth(NthSpec)//, months([Int])
+    case nthWeek(NthSpec), nthMonth(NthSpec)
     
     var interval: HaltInterval {
         switch self {
         case .nthWeek(_): return .nthWeek
         case .nthMonth(_): return .nthMonth
-//        case .months(_): return .monthly
         }
     }
     
@@ -126,7 +140,6 @@ enum Halt: Codable {
         switch self {
         case .nthWeek(let spec): return spec.nth
         case .nthMonth(let spec): return spec.nth
-//        default: return nil
         }
     }
     
@@ -177,7 +190,10 @@ struct MutableReminder {
     var enabled: Bool
     var name: String
     var whenInterval: Interval
+    // All days including selection states
     var whenWeekDays: [WeekDaySelection]
+    var selectedWeekDays: [WeekDay] { whenWeekDays.filter({ day in day.isSelected }).map({ day in day.day }) }
+    // All days of month including selection states
     var whenDaysOfMonth: [DayOfMonthSelection]
     var timeAsDate: Date
     var haltInterval: HaltInterval
@@ -186,34 +202,39 @@ struct MutableReminder {
     
     func upcoming(from: Date, limit: Int) -> [Date] {
         guard limit > 0 else { return [] }
+        guard enabled else { return [] }
         let cal = Calendar.current
         let time = timeAsDate.time
+        let startCandidate = cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from) ?? from
         switch whenInterval {
         case .none:
-            let date = cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from) ?? from
             let now = Date()
-            return date > now ? [date] : []
+            return startCandidate > now ? [startCandidate] : []
         case .daily:
-            let today = cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from) ?? from
-            let tomorrow = cal.date(byAdding: .day, value: 1, to: today) ?? from
+            guard !selectedWeekDays.isEmpty else { return [] }
+            let tomorrow = cal.date(byAdding: .day, value: 1, to: startCandidate) ?? from
             // If equal, take next day, prob recursion
-            let next = from < today ? today : tomorrow
+            let next = from < startCandidate ? startCandidate : tomorrow
             let range = 1..<limit
-            let potentialDays = [next] + range.compactMap { i in
+            let potentialRange = ([next] + range.compactMap { i in
                 cal.date(byAdding: .day, value: i, to: next)
-            }
+            })
+            let potentialDays = potentialRange.filter({ date in
+                selectedWeekDays.contains { day in
+                    (try? WeekDay.gregorian(cal: cal, date: date) == day) ?? false
+                }
+            })
             let halt = asHalt()
             let batch = potentialDays.filter { date in
                 !(halt?.isHalted(date: date) ?? false)
             }
-            if let mostDistant = potentialDays.last, batch.count < limit {
-                log.info("Recurse after batch \(batch.count) remaining \(limit-batch.count) from \(mostDistant)")
-                return batch + upcoming(from: mostDistant, limit: limit - batch.count)
+            if let nextFrom = cal.date(byAdding: .day, value: limit, to: from), batch.count < limit {
+//                log.info("Recurse after batch \(batch.count) remaining \(limit-batch.count) from \(nextFrom)")
+                return batch + upcoming(from: nextFrom, limit: limit - batch.count)
             } else {
                 return batch
             }
         case .monthly:
-            let startCandidate = cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from) ?? from
             let now = Date()
             if now > startCandidate {
                 guard let nextCandidate = cal.date(byAdding: .month, value: 1, to: startCandidate) else { return [] }
@@ -227,7 +248,7 @@ struct MutableReminder {
                 let batch = potentialMonths.filter { date in
                     !(halt?.isHalted(date: date) ?? false)
                 }
-                if let mostDistant = potentialMonths.last, batch.count < limit, let nextFrom = cal.date(byAdding: .month, value: 1, to: mostDistant) {
+                if let nextFrom = cal.date(byAdding: .month, value: limit, to: from), batch.count < limit {
 //                    log.info("Recurse after batch \(batch.count) remaining \(limit-batch.count) from \(mostDistant)")
                     return batch + upcoming(from: nextFrom, limit: limit - batch.count)
                 } else {
@@ -235,10 +256,9 @@ struct MutableReminder {
                 }
             }
         case .daysOfMonth:
-            let today = cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from) ?? from
-            let tomorrow = cal.date(byAdding: .day, value: 1, to: today) ?? from
+            let tomorrow = cal.date(byAdding: .day, value: 1, to: startCandidate) ?? from
             // If equal, take next day, prob recursion
-            let next = from < today ? today : tomorrow
+            let next = from < startCandidate ? startCandidate : tomorrow
             let range = 0..<limit
             let potentialDays = range.compactMap { i in
                 cal.date(byAdding: .day, value: i, to: next)
@@ -253,7 +273,7 @@ struct MutableReminder {
             let batch = potentialDays.filter { date in
                 !(halt?.isHalted(date: date) ?? false)
             }
-            if batch.count < limit, let nextFrom = cal.date(byAdding: .day, value: 1, to: potentialDays.last ?? from) {
+            if let nextFrom = cal.date(byAdding: .day, value: limit, to: from), batch.count < limit {
 //                log.info("Recurse after batch \(batch.count) remaining \(limit-batch.count) from \(nextFrom)")
                 return batch + upcoming(from: nextFrom, limit: limit - batch.count)
             } else {
@@ -278,17 +298,16 @@ struct MutableReminder {
         case .none:
             return .once(start.at(time: timeAsDate.time))
         case .daily:
-            let days = whenWeekDays.filter({ day in day.isSelected }).map({ day in day.day })
-            return When.daily(days, timeAsDate.time)
+            return .daily(selectedWeekDays, timeAsDate.time)
         case .monthly:
-            return When.monthly(timeAsDate.time)
+            return .monthly(timeAsDate.time)
         case .daysOfMonth:
             let daysOfMonth = whenDaysOfMonth.filter({ dayOfMonth in
                 dayOfMonth.isSelected
             }).map({ dayOfMonth in
                 dayOfMonth.day
             })
-            return When.daysOfMonth(daysOfMonth, timeAsDate.time)
+            return .daysOfMonth(daysOfMonth, timeAsDate.time)
         }
     }
     
