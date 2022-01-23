@@ -109,7 +109,7 @@ struct ReminderEdit: View {
             }
             Button(action: onTestNow) {
                 Label("Send test reminder now", systemImage: "bell.and.waveform")
-            }
+            }.disabled(reminder.name.isEmpty)
             Toggle(isOn: $reminder.enabled) {
                 Text("Enable").bold()
             }

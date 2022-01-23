@@ -195,6 +195,7 @@ struct MutableReminder {
     var selectedWeekDays: [WeekDay] { whenWeekDays.filter({ day in day.isSelected }).map({ day in day.day }) }
     // All days of month including selection states
     var whenDaysOfMonth: [DayOfMonthSelection]
+    var selectedDaysOfMonth: [Int] { whenDaysOfMonth.filter({ day in day.isSelected }).map({ day in day.day}) }
     var timeAsDate: Date
     var haltInterval: HaltInterval
     var haltNth: Int
@@ -256,6 +257,7 @@ struct MutableReminder {
                 }
             }
         case .daysOfMonth:
+            guard !selectedDaysOfMonth.isEmpty else { return [] }
             let tomorrow = cal.date(byAdding: .day, value: 1, to: startCandidate) ?? from
             // If equal, take next day, prob recursion
             let next = from < startCandidate ? startCandidate : tomorrow
@@ -325,12 +327,13 @@ struct Reminder: Codable, Identifiable {
     let start: Date
     
     var mutable: MutableReminder {
-        let enabledDays = when.weekDays ?? []
+        let enabledDays = when.weekDays ?? WeekDay.allCases
         let weekDays = WeekDay.allCases.map { weekDay in
             WeekDaySelection(day: weekDay, isSelected: enabledDays.contains(weekDay))
         }
-        let enabledMonthDays = when.monthDays ?? []
-        let monthDays = (1...31).map { day in
+        let allDays = Array(1...31)
+        let enabledMonthDays = when.monthDays ?? allDays
+        let monthDays = allDays.map { day in
             DayOfMonthSelection(day: day, isSelected: enabledMonthDays.contains(day))
         }
         return MutableReminder(id: id, enabled: enabled, name: name, whenInterval: when.interval, whenWeekDays: weekDays, whenDaysOfMonth: monthDays, timeAsDate: when.time.today, haltInterval: halt?.interval ?? HaltInterval.none, haltNth: halt?.nth ?? 2, start: start) }
