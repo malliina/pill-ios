@@ -207,6 +207,7 @@ struct MutableReminder {
         let cal = Calendar.current
         let time = timeAsDate.time
         let startCandidate = cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from) ?? from
+        let range = 0..<limit
         switch whenInterval {
         case .none:
             let now = Date()
@@ -216,10 +217,9 @@ struct MutableReminder {
             let tomorrow = cal.date(byAdding: .day, value: 1, to: startCandidate) ?? from
             // If equal, take next day, prob recursion
             let next = from < startCandidate ? startCandidate : tomorrow
-            let range = 1..<limit
-            let potentialRange = ([next] + range.compactMap { i in
+            let potentialRange = range.compactMap { i in
                 cal.date(byAdding: .day, value: i, to: next)
-            })
+            }
             let potentialDays = potentialRange.filter({ date in
                 selectedWeekDays.contains { day in
                     (try? WeekDay.gregorian(cal: cal, date: date) == day) ?? false
@@ -241,7 +241,6 @@ struct MutableReminder {
                 guard let nextCandidate = cal.date(byAdding: .month, value: 1, to: startCandidate) else { return [] }
                 return upcoming(from: nextCandidate, limit: limit)
             } else {
-                let range = 0..<limit
                 let potentialMonths = range.compactMap { i in
                     cal.date(byAdding: .month, value: i, to: startCandidate)
                 }
@@ -261,7 +260,6 @@ struct MutableReminder {
             let tomorrow = cal.date(byAdding: .day, value: 1, to: startCandidate) ?? from
             // If equal, take next day, prob recursion
             let next = from < startCandidate ? startCandidate : tomorrow
-            let range = 0..<limit
             let potentialDays = range.compactMap { i in
                 cal.date(byAdding: .day, value: i, to: next)
             }.filter { date in

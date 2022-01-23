@@ -61,6 +61,29 @@ struct ReminderEdit: View {
     }
     var dateText: String { reminder.whenInterval == .none ? "Date" : "Starting" }
     var upcoming: [Date] { reminder.upcoming(from: reminder.start, limit: 10) }
+    var describeWeekDays: String {
+        let selected = reminder.selectedWeekDays
+        if selected.isEmpty {
+            return "Select weekdays"
+        } else if selected == WeekDay.allCases {
+            return "Every day"
+        } else {
+            return reminder.selectedWeekDays.map { $0.short }.joined(separator: ", ")
+        }
+    }
+    var describeDaysOfMonth: String {
+        let selected = reminder.selectedDaysOfMonth
+        if selected.isEmpty {
+            return "Select days of month"
+        } else if selected.count == 31 {
+            return "All days"
+        } else if selected.count < 7 {
+            let daysDescribed = selected.map { "\($0)" }.joined(separator: ", ")
+            return "Days \(daysDescribed) of month"
+        } else {
+            return "\(selected.count) days of month"
+        }
+    }
     var body: some View {
         List {
             Group {
@@ -84,12 +107,12 @@ struct ReminderEdit: View {
                 }
                 if reminder.whenInterval == .daily {
                     NavigationLink(destination: WeekDaysSelector(weekDays: $reminder.whenWeekDays)) {
-                        Label("Select weekdays", systemImage: "calendar.badge.plus")
+                        Label(describeWeekDays, systemImage: "calendar.badge.plus")
                     }
                 }
                 if reminder.whenInterval == .daysOfMonth {
                     NavigationLink(destination: DaysOfMonthSelector(monthDays: $reminder.whenDaysOfMonth)) {
-                        Label("Select days of month", systemImage: "calendar.badge.plus")
+                        Label(describeDaysOfMonth, systemImage: "calendar.badge.plus")
                     }
                 }
                 if reminder.whenInterval != .none {

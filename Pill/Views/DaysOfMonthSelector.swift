@@ -46,7 +46,7 @@ struct DaysOfMonthSelector: View {
                     forall(selected: false)
                 }
                 Spacer()
-            }
+            }.padding()
             List {
                 ForEach(0..<monthDays.count) { index in
                     HStack {
@@ -64,8 +64,7 @@ struct DaysOfMonthSelector: View {
                     }
                 }
             }
-            
-        }
+        }.navigationTitle("Select days")
     }
 }
 
