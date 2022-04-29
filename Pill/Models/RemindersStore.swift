@@ -7,16 +7,19 @@
 
 import Foundation
 
-final class RemindersStore: ObservableObject {
-    static let log = LoggerFactory.shared.system(RemindersStore.self)
+class RemindersStore: ObservableObject {
+    let log = LoggerFactory.shared.system(RemindersStore.self)
+    static let current = RemindersStore()
     
     @Published var reminders: [Reminder] = []
     
-    static func load(completion: ([Reminder]) -> Void) {
-        completion(Pill.PillSettings.shared.reminders)
+    func load() async -> [Reminder] {
+        return await withCheckedContinuation { continuation in
+            continuation.resume(returning: Pill.PillSettings.shared.reminders)
+        }
     }
     
-    static func save(_ newReminders: [Reminder]) {
+    func save(_ newReminders: [Reminder]) {
         Pill.PillSettings.shared.reminders = newReminders
         log.info("Saved \(newReminders.count) reminders.")
     }

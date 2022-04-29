@@ -20,42 +20,39 @@ class Notifications: NSObject, UNUserNotificationCenterDelegate {
         center.delegate = NotificationsDelegate.current
     }
     
-    func request(onAuthorized: @escaping () -> Void) {
-        center.getNotificationSettings { settings in
-            switch settings.authorizationStatus {
-            case .denied: ()
-            case .notDetermined:
-                self.center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-                    let log = self.log
-                    if let error = error {
-                        log.error("Failed to request authorization to send notifications. \(error)")
-                    }
-                    if granted {
-                        log.info("Authorization to send notifications granted.")
-                        onAuthorized()
-                    } else {
-                        log.info("Authorization to send notifications denied.")
-                    }
+    func request() async -> Bool {
+        let settings = await center.notificationSettings()
+        switch settings.authorizationStatus {
+        case .denied: return false
+        case .notDetermined:
+            do {
+                let granted = try await self.center.requestAuthorization(options: [.alert, .sound, .badge])
+                if granted {
+                    log.info("Authorization to send notifications granted.")
+                } else {
+                    log.info("Authorization to send notifications denied.")
                 }
-            default: onAuthorized()
+                return granted
+            } catch let error {
+                log.error("Failed to request authorization to send notifications. \(error)")
+                return false
             }
+        default: return false
         }
-        
     }
     
-    func scheduleOnce(title: String, body: String, at date: DateComponents) {
+    func scheduleOnce(title: String, body: String, at date: DateComponents) async {
         let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: false)
         let uuidString = UUID().uuidString
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
         let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
-        center.add(request) { error in
-            if let error = error {
-                self.log.error("Failed to add notification request at \(date). \(error)")
-            } else {
-                self.log.info("Scheduled \(content.title) notification at \(date).")
-            }
+        do {
+            try await center.add(request)
+            self.log.info("Scheduled \(content.title) notification at \(date).")
+        } catch let error {
+            self.log.error("Failed to add notification request at \(date). \(error)")
         }
     }
 }

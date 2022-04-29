@@ -52,12 +52,11 @@ struct ReminderEdit: View {
     var start: Date { reminder.start }
     static let dateFormatter = Dates.current.formatter()
     
-    func onTestNow() {
-        Notifications.current.request {
-            let date = calendar.date(byAdding: .second, value: 1, to: Date()) ?? Date()
-            let when = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
-            Notifications.current.scheduleOnce(title: reminder.name, body: "", at: when)
-        }
+    func onTestNow() async {
+        let granted = await Notifications.current.request()
+        guard granted else { return }
+        let date = calendar.date(byAdding: .second, value: 1, to: Date()) ?? Date()
+        await Notifications.current.scheduleOnce(title: reminder.name, body: "", at: date.components)
     }
     var dateText: String { reminder.whenInterval == .none ? "Date" : "Starting" }
     var upcoming: [Date] { reminder.upcoming(from: reminder.start, limit: 10) }
@@ -131,7 +130,7 @@ struct ReminderEdit: View {
                     }
                 }
             }
-            Button(action: onTestNow) {
+            Button(action: { Task { await onTestNow() } } ) {
                 Label("Send test reminder now", systemImage: "bell.and.waveform")
             }.disabled(reminder.name.isEmpty)
             Toggle(isOn: $reminder.enabled) {

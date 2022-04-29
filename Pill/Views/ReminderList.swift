@@ -14,6 +14,8 @@ struct ReminderList: View {
     @State private var isAddingNewView = false
     @Environment(\.scenePhase) private var scenePhase
     
+    let remindersStore = RemindersStore.current
+    
     func onAddNew() {
         isAddingNewView = true
     }
@@ -22,7 +24,7 @@ struct ReminderList: View {
         data.reminders.removeAll { elem in
             elem.id == r.id
         }
-        RemindersStore.save(data.reminders)
+        remindersStore.save(data.reminders)
     }
     
     var body: some View {
@@ -40,7 +42,7 @@ struct ReminderList: View {
                         if let idx = idx {
                             data.reminders[idx] = r
                         }
-                        RemindersStore.save(data.reminders)
+                        remindersStore.save(data.reminders)
                     } delete: { r in onDelete(r) }) {
                         ReminderRow(reminder: reminder)
                     }.swipeActions {
@@ -57,7 +59,7 @@ struct ReminderList: View {
                 ReminderEdit(reminder: MutableReminder.create(), isNew: true) { r in
                     log.info("Save new \(r.name)")
                     data.reminders.append(r)
-                    RemindersStore.save(data.reminders)
+                    remindersStore.save(data.reminders)
                 } delete: { r in log.info("Unused") }
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
@@ -68,11 +70,8 @@ struct ReminderList: View {
                 }
             }
         }
-        .onAppear {
-            RemindersStore.load { reminders in
-                self.log.info("Loaded \(reminders.count) reminders.")
-                data.reminders = reminders
-            }
+        .task {
+            data.reminders = await remindersStore.load()
         }
         .onChange(of: scenePhase) { phase in
             log.info("Phase \(phase)")

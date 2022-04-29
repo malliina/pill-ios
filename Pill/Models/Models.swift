@@ -177,6 +177,10 @@ extension Date {
         let cal = Calendar.current
         return cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: self) ?? self
     }
+    
+    var components: DateComponents {
+        return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self)
+    }
 }
 
 struct MutableReminder {
@@ -334,7 +338,12 @@ struct Reminder: Codable, Identifiable {
         let monthDays = allDays.map { day in
             DayOfMonthSelection(day: day, isSelected: enabledMonthDays.contains(day))
         }
-        return MutableReminder(id: id, enabled: enabled, name: name, whenInterval: when.interval, whenWeekDays: weekDays, whenDaysOfMonth: monthDays, timeAsDate: when.time.today, haltInterval: halt?.interval ?? HaltInterval.none, haltNth: halt?.nth ?? 2, start: start) }
+        return MutableReminder(id: id, enabled: enabled, name: name, whenInterval: when.interval, whenWeekDays: weekDays, whenDaysOfMonth: monthDays, timeAsDate: when.time.today, haltInterval: halt?.interval ?? HaltInterval.none, haltNth: halt?.nth ?? 2, start: start)
+    }
+    
+    func upcoming(from: Date, limit: Int) -> [Date] {
+        return mutable.upcoming(from: from, limit: limit)
+    }
 }
 
 struct Reminders: Codable {
