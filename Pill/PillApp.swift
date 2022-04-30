@@ -14,7 +14,7 @@ struct PillApp: App {
     @StateObject private var store = RemindersStore()
     
     init() {
-        let scheduling = Task {
+        Task {
             await RemindersNotifications.current.resetAllNow()
         }
     }

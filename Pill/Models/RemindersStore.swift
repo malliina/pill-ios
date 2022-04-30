@@ -19,9 +19,10 @@ class RemindersStore: ObservableObject {
         }
     }
     
-    func save(_ newReminders: [Reminder]) {
+    func save(_ newReminders: [Reminder]) async {
         Pill.PillSettings.shared.reminders = newReminders
         log.info("Saved \(newReminders.count) reminders.")
+        await RemindersNotifications.current.resetAllNow()
     }
     
     static let sampleReminders: [Reminder] = [

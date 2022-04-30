@@ -20,11 +20,11 @@ struct ReminderList: View {
         isAddingNewView = true
     }
     
-    func onDelete(_ r: Reminder) {
+    func onDelete(_ r: Reminder) async {
         data.reminders.removeAll { elem in
             elem.id == r.id
         }
-        remindersStore.save(data.reminders)
+        await remindersStore.save(data.reminders)
     }
     
     var body: some View {
@@ -42,11 +42,13 @@ struct ReminderList: View {
                         if let idx = idx {
                             data.reminders[idx] = r
                         }
-                        remindersStore.save(data.reminders)
-                    } delete: { r in onDelete(r) }) {
+                        Task {
+                            await remindersStore.save(data.reminders)
+                        }
+                    } delete: { r in Task { await onDelete(r) } }) {
                         ReminderRow(reminder: reminder)
                     }.swipeActions {
-                        Button(role: .destructive) { onDelete(reminder) } label: {
+                        Button(role: .destructive) { Task { await onDelete(reminder) } } label: {
                             Label("Delete", systemImage: "trash")
                         }
                     }
@@ -59,7 +61,9 @@ struct ReminderList: View {
                 ReminderEdit(reminder: MutableReminder.create(), isNew: true) { r in
                     log.info("Save new \(r.name)")
                     data.reminders.append(r)
-                    remindersStore.save(data.reminders)
+                    Task {
+                        await remindersStore.save(data.reminders)
+                    }
                 } delete: { r in log.info("Unused") }
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {

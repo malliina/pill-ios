@@ -28,7 +28,7 @@ class RemindersNotifications {
         await reset(reminders: await remindersStore.load(), from: Date.now)
     }
     
-    func reset(reminders: [Reminder], from: Date) async {
+    private func reset(reminders: [Reminder], from: Date) async {
         notifications.center.removeAllPendingNotificationRequests()
         await schedule(reminders: reminders, from: from)
     }
@@ -45,10 +45,6 @@ class RemindersNotifications {
             let reminder = dr.reminder
             await notifications.scheduleOnce(title: reminder.name, body: "", at: dr.date.components)
         }
-//        sorted.forEach { dr in
-//            let reminder = dr.reminder
-//            await notifications.scheduleOnce(title: reminder.name, body: "", at: dr.date.components)
-//        }
         log.info("Scheduled \(sorted.count) reminders.")
     }
 }
