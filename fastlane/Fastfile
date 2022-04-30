@@ -21,7 +21,6 @@ platform :ios do
 
   desc "Build with connect"
   lane :connect do
-    xcversion(version: "13.3")
     setup_ci if ENV['CI']
     unlock_keychain(
       path: "fastlane_tmp_keychain",
