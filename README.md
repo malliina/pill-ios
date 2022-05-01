@@ -4,6 +4,10 @@ Take your pills.
 
 ## Distribution
 
-GitHub Actions uses fastlane to deploy updates. To deploy, push to the master branch.
+### Setup
 
 Disable "Automatically manage signing" in Xcode.
+
+### Deployments
+
+GitHub Actions uses fastlane to deploy updates. To deploy, push to the master branch.
