@@ -27,33 +27,44 @@ struct ReminderList: View {
         await remindersStore.save(data.reminders)
     }
     
+    func versions() -> String? {
+        guard let bundleMeta = Bundle.main.infoDictionary,
+              let appVersion = bundleMeta["CFBundleShortVersionString"] as? String,
+              let buildId = bundleMeta["CFBundleVersion"] as? String else { return nil }
+        return "Version \(appVersion) build \(buildId)"
+    }
+    
     var body: some View {
         NavigationView {
-            List {
-                Button(action: onAddNew) {
-                    Label("Add Reminder", systemImage: "calendar.badge.plus")
-                }
-                ForEach(data.reminders) { reminder in
-                    NavigationLink(destination: ReminderEdit(reminder: reminder.mutable, isNew: false) { r in
-                        log.info("Save edited \(r.name).")
-                        let idx = data.reminders.firstIndex { rem in
-                            rem.id == r.id
-                        }
-                        if let idx = idx {
-                            data.reminders[idx] = r
-                        }
-                        Task {
-                            await remindersStore.save(data.reminders)
-                        }
-                    } delete: { r in Task { await onDelete(r) } }) {
-                        ReminderRow(reminder: reminder)
-                    }.swipeActions {
-                        Button(role: .destructive) { Task { await onDelete(reminder) } } label: {
-                            Label("Delete", systemImage: "trash")
+            VStack {
+                List {
+                    Button(action: onAddNew) {
+                        Label("Add Reminder", systemImage: "calendar.badge.plus")
+                    }
+                    ForEach(data.reminders) { reminder in
+                        NavigationLink(destination: ReminderEdit(reminder: reminder.mutable, isNew: false) { r in
+                            log.info("Save edited \(r.name).")
+                            let idx = data.reminders.firstIndex { rem in
+                                rem.id == r.id
+                            }
+                            if let idx = idx {
+                                data.reminders[idx] = r
+                            }
+                            Task {
+                                await remindersStore.save(data.reminders)
+                            }
+                        } delete: { r in Task { await onDelete(r) } }) {
+                            ReminderRow(reminder: reminder)
+                        }.swipeActions {
+                            Button(role: .destructive) { Task { await onDelete(reminder) } } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
                         }
                     }
-                }
-            }.navigationTitle("The Pill")
+                }.navigationTitle("The Pill")
+                
+                Text(versions() ?? "").font(Font.system(size: 14))
+            }
         }
         .navigationViewStyle(.stack)
         .sheet(isPresented: $isAddingNewView) {
