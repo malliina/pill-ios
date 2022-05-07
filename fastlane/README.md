@@ -15,18 +15,18 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
-### ios connect
+### ios release
 
 ```sh
-[bundle exec] fastlane ios connect
+[bundle exec] fastlane ios release
 ```
 
-Build with connect
+Release to TestFlight
 
-### ios local
+### ios prepare
 
 ```sh
-[bundle exec] fastlane ios local
+[bundle exec] fastlane ios prepare
 ```
 
 
