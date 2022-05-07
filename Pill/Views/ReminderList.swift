@@ -61,7 +61,7 @@ struct ReminderList: View {
                             }
                         }
                     }
-                }.navigationTitle("The Pill")
+                }.navigationTitle("PillAlarm")
                 
                 Text(versions() ?? "").font(Font.system(size: 14))
             }
