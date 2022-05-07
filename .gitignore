@@ -20,3 +20,6 @@ Pods
 pill-ios/Credentials.plist
 fastlane/report.xml
 fastlane/test_output
+
+AuthKey*
+certificate*
