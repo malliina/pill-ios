@@ -9,13 +9,20 @@ import SwiftUI
 
 @main
 struct PillApp: App {
-    let log = LoggerFactory.shared.system(PillApp.self)
+    static let log = LoggerFactory.shared.system(PillApp.self)
     
     @StateObject private var store = RemindersStore()
     
     init() {
         Task {
-            await RemindersNotifications.current.resetAllNow()
+            let cal = Calendar.current
+            if let date = PillSettings.shared.lastScheduling?.asDate,
+                let threshold = cal.date(byAdding: .day, value: 3, to: date),
+                threshold > Date.now {
+                PillApp.log.info("Scheduling is recent enough, will not schedule for now.")
+            } else {
+                await RemindersNotifications.current.resetAllNow()
+            }
         }
     }
     

@@ -360,3 +360,10 @@ struct Dates {
         return df
     }
 }
+
+struct SchedulingTime: Codable {
+    let when: TimeInterval
+    var asDate: Date {
+        Date(timeIntervalSince1970: when)
+    }
+}

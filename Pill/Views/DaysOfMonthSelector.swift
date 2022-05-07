@@ -11,18 +11,10 @@ import SwiftUI
 struct DayOfMonthSelection {
     let day: Int
     var isSelected: Bool
-    
-//    func enable() {
-//        isSelected = true
-//    }
 }
 
 struct DayOfMonthSelections {
     let selections: [DayOfMonthSelection]
-    
-//    func mutateAll(selected: Bool) {
-//        selections.forEach { $0.isSelected = selected }
-//    }
 }
 
 struct DaysOfMonthSelector: View {

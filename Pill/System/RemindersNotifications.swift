@@ -31,6 +31,7 @@ class RemindersNotifications {
     private func reset(reminders: [Reminder], from: Date) async {
         notifications.center.removeAllPendingNotificationRequests()
         await schedule(reminders: reminders, from: from)
+        PillSettings.shared.updateScheduling(when: from)
     }
     
     private func schedule(reminders: [Reminder], from: Date, limit: Int = 64) async {

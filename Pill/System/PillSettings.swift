@@ -34,6 +34,14 @@ class PillSettings {
             write(Reminders(reminders: rs), toKey: remindersKey)
         }
     }
+    private let lastSchedulingKey = "lastScheduling"
+    func updateScheduling(when: Date = Date.now) {
+        lastScheduling = SchedulingTime(when: when.timeIntervalSince1970)
+    }
+    var lastScheduling: SchedulingTime? {
+        get { readKey(lastSchedulingKey, to: SchedulingTime.self) }
+        set(v) { write(v, toKey: lastSchedulingKey) }
+    }
     
     func readKey<T: Decodable>(_ key: String, to: T.Type) -> T? {
         if let str = prefs.string(forKey: key) {
