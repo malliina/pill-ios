@@ -2,7 +2,9 @@ name: Fastlane
 on:
   push:
     branches:
-      - prod
+      - master
+    tags-ignore:
+      - builds/**
 
 jobs:
   build:

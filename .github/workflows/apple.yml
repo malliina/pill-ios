@@ -2,7 +2,7 @@ name: Fastlane
 on:
   push:
     tags:
-      - builds*
+      - builds/**
 
 jobs:
   build:
