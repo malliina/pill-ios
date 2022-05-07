@@ -1,9 +1,7 @@
-name: Prepare
+name: Upload
 on:
   push:
-    branches:
-      - prod
-    tags-ignore:
+    tags:
       - builds/**
 
 jobs:
@@ -21,8 +19,8 @@ jobs:
         env:
           APPSTORE_CONNECT_API_KEY: ${{ secrets.APPSTORE_CONNECT_API_KEY }}
           CERTIFICATE_P12: ${{ secrets.CERTIFICATE_P12 }}
-      - name: Prepare
-        run: fastlane prepare
+      - name: Upload
+        run: fastlane upload
         env:
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
