@@ -60,7 +60,12 @@ platform :ios do
     get_provisioning_profile(filename: "App.mobileprovision")
     build_app(scheme: "Pill")
     # upload_to_testflight
-    upload_to_app_store(force: true, submit_for_review: true)
+    upload_to_app_store(
+      force: true, 
+      submit_for_review: true, 
+      automatic_release: true, 
+      precheck_include_in_app_purchases: false
+    )
   end
 
   lane :tests do
