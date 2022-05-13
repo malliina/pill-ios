@@ -155,8 +155,11 @@ struct ReminderEdit: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {
-                    onSave(reminder.immutable)
-                    dismiss()
+                    Task {
+                        let _ = await Notifications.current.request()
+                        onSave(reminder.immutable)
+                        dismiss()
+                    }
                 }.disabled(reminder.name.isEmpty)
             }
         }

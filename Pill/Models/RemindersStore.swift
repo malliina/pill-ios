@@ -32,16 +32,3 @@ class RemindersStore: ObservableObject {
         Reminder(id: "4", enabled: true, name: "Days of month", when: When.daysOfMonth([3, 14], Time(hour: 3, minute: 5)), halt: nil, start: Date())
     ]
 }
-
-//class UpcomingItemsSource: ObservableObject {
-//    @Published var items: [Date] = []
-//    private var currentPage = 1
-//    
-//    let reminder: MutableReminder
-//    
-//    init(reminder: MutableReminder) {
-//        self.reminder = reminder
-//    }
-//    
-//    func loadMore(
-//}

@@ -41,6 +41,10 @@ class Notifications: NSObject, UNUserNotificationCenterDelegate {
         }
     }
     
+    func settings() async -> UNNotificationSettings {
+        return await center.notificationSettings()
+    }
+    
     func scheduleOnce(title: String, body: String, at date: DateComponents) async {
         let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: false)
         let uuidString = UUID().uuidString

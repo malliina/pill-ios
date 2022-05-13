@@ -10,6 +10,7 @@ import SwiftUI
 struct ReminderList: View {
     let log = LoggerFactory.shared.system(ReminderList.self)
     @EnvironmentObject var data: RemindersStore
+    @State private var notificationsDenied: Bool = false
     @State private var showingProfile = false
     @State private var isAddingNewView = false
     @Environment(\.scenePhase) private var scenePhase
@@ -63,6 +64,11 @@ struct ReminderList: View {
                     }
                 }.navigationTitle("PillAlarm")
                 
+                if notificationsDenied {
+                    Button("Notifications are denied. Please enable notifications for this app in system settings.") {
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                    }.padding()
+                }
                 Text(versions() ?? "").font(Font.system(size: 14))
             }
         }
@@ -93,6 +99,11 @@ struct ReminderList: View {
             if phase == .inactive {
                 // when resuming app, the resume scenes are:
                 // background -> inactive -> active
+            }
+            if phase == .active {
+                Task {
+                    notificationsDenied = (await Notifications.current.settings().authorizationStatus) == .denied
+                }
             }
         }
     }
