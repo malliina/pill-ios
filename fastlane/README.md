@@ -21,7 +21,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios release
 ```
 
-Release to TestFlight
+Release
 
 ### ios prepare
 
@@ -29,7 +29,15 @@ Release to TestFlight
 [bundle exec] fastlane ios prepare
 ```
 
+Prepare for release
 
+### ios upload
+
+```sh
+[bundle exec] fastlane ios upload
+```
+
+Build and upload to TestFlight
 
 ### ios tests
 
