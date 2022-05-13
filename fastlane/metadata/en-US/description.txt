@@ -1,0 +1,3 @@
+Schedule alarms on your device using PillAlarm, the ultimate alarm app.
+
+Schedule one-off alarms or repeat them daily, monthly, or at specific days of month. Add exceptions to automatically turn off alarms weekly or monthly. For example, create an alarm that triggers a notification on your phone every day at 9:00 am but every four weeks is turned off.
