@@ -12,15 +12,16 @@ class RemindersStore: ObservableObject {
     static let current = RemindersStore()
     
     @Published var reminders: [Reminder] = []
+    var settings: PillSettings { PillSettings.shared }
     
     func load() async -> [Reminder] {
-        return await withCheckedContinuation { continuation in
-            continuation.resume(returning: Pill.PillSettings.shared.reminders)
+        await withCheckedContinuation { continuation in
+            continuation.resume(returning: settings.reminders)
         }
     }
     
     func save(_ newReminders: [Reminder]) async {
-        Pill.PillSettings.shared.reminders = newReminders
+        settings.reminders = newReminders
         log.info("Saved \(newReminders.count) reminders.")
         await RemindersNotifications.current.resetAllNow()
     }

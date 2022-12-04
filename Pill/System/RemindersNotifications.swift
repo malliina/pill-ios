@@ -12,6 +12,10 @@ struct DatedReminder {
     let reminder: Reminder
 }
 
+struct NotificationRequest {
+    let title: String
+}
+
 class RemindersNotifications {
     let log = LoggerFactory.shared.system(RemindersNotifications.self)
     static let current = RemindersNotifications(reminders: RemindersStore.current, notifications: Notifications.current)
@@ -26,6 +30,13 @@ class RemindersNotifications {
     
     func resetAllNow() async {
         await reset(reminders: await remindersStore.load(), from: Date.now)
+    }
+    
+    func requests() async -> [NotificationRequest] {
+        let rs = await notifications.center.pendingNotificationRequests()
+        return rs.map { req in
+            NotificationRequest(title: req.content.title)
+        }
     }
     
     private func reset(reminders: [Reminder], from: Date) async {

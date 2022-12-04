@@ -21,6 +21,7 @@
 		7D5996D52719E9710062FDAF /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5996D42719E9710062FDAF /* Notifications.swift */; };
 		7D5996D72719EB700062FDAF /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5996D62719EB700062FDAF /* Log.swift */; };
 		7D6BF6E8281C5DB3007C5FD5 /* RemindersNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6BF6E7281C5DB3007C5FD5 /* RemindersNotifications.swift */; };
+		7DA7E6B028718F3600379577 /* ReminderBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA7E6AF28718F3600379577 /* ReminderBox.swift */; };
 		7DE6FFAE271B10C3009B77F0 /* PillSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6FFAD271B10C3009B77F0 /* PillSettings.swift */; };
 		7DE6FFB0271C4D3E009B77F0 /* WeekDaysSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6FFAF271C4D3E009B77F0 /* WeekDaysSelector.swift */; };
 		7DE6FFB2271C51AF009B77F0 /* DaysOfMonthSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6FFB1271C51AF009B77F0 /* DaysOfMonthSelector.swift */; };
@@ -63,6 +64,7 @@
 		7D5996D42719E9710062FDAF /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		7D5996D62719EB700062FDAF /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		7D6BF6E7281C5DB3007C5FD5 /* RemindersNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersNotifications.swift; sourceTree = "<group>"; };
+		7DA7E6AF28718F3600379577 /* ReminderBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderBox.swift; sourceTree = "<group>"; };
 		7DE6FFAD271B10C3009B77F0 /* PillSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillSettings.swift; sourceTree = "<group>"; };
 		7DE6FFAF271C4D3E009B77F0 /* WeekDaysSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDaysSelector.swift; sourceTree = "<group>"; };
 		7DE6FFB1271C51AF009B77F0 /* DaysOfMonthSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysOfMonthSelector.swift; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				7D2093ED26FF5DBC00F24FBD /* ReminderList.swift */,
 				7D20941B26FF65C700F24FBD /* ReminderRow.swift */,
 				7DE6FFAF271C4D3E009B77F0 /* WeekDaysSelector.swift */,
+				7DA7E6AF28718F3600379577 /* ReminderBox.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				7D20941726FF60CC00F24FBD /* Models.swift in Sources */,
 				7D5996D52719E9710062FDAF /* Notifications.swift in Sources */,
 				7D6BF6E8281C5DB3007C5FD5 /* RemindersNotifications.swift in Sources */,
+				7DA7E6B028718F3600379577 /* ReminderBox.swift in Sources */,
 				7D20941C26FF65C700F24FBD /* ReminderRow.swift in Sources */,
 				7DE6FFB2271C51AF009B77F0 /* DaysOfMonthSelector.swift in Sources */,
 				7D20941926FF64A500F24FBD /* RemindersStore.swift in Sources */,

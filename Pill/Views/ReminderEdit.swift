@@ -51,12 +51,17 @@ struct ReminderEdit: View {
     let calendar = Calendar.current
     var start: Date { reminder.start }
     static let dateFormatter = Dates.current.formatter()
+    var notifications: Notifications { Notifications.current }
     
     func onTestNow() async {
-        let granted = await Notifications.current.request()
-        guard granted else { return }
-        let date = calendar.date(byAdding: .second, value: 1, to: Date()) ?? Date()
-        await Notifications.current.scheduleOnce(title: reminder.name, body: "", at: date.components)
+        if await notifications.request() {
+            log.info("Scheduling notification in 1 second.")
+            let now = Date.now
+            let date = calendar.date(byAdding: .second, value: 1, to: now) ?? now
+            await notifications.scheduleOnce(title: reminder.name, body: "", at: date.components)
+        } else {
+            log.info("Notification permission not granted, not testing.")
+        }
     }
     var dateText: String { reminder.whenInterval == .none ? "Date" : "Starting" }
     var upcoming: [Date] { reminder.upcoming(from: reminder.start, limit: 10) }
@@ -130,7 +135,9 @@ struct ReminderEdit: View {
                     }
                 }
             }
-            Button(action: { Task { await onTestNow() } } ) {
+            Button {
+                Task { await onTestNow() }
+            } label: {
                 Label("Send test reminder now", systemImage: "bell.and.waveform")
             }.disabled(reminder.name.isEmpty)
             Toggle(isOn: $reminder.enabled) {
@@ -143,7 +150,8 @@ struct ReminderEdit: View {
                 }
             }
             Spacer()
-            Label("Upcoming reminders", systemImage: "calendar").font(.body.bold())
+            Label("Upcoming reminders", systemImage: "calendar")
+                .font(.body.bold())
             ForEach(upcoming, id: \.self) { date in
                 Text(ReminderEdit.dateFormatter.string(from: date))
             }

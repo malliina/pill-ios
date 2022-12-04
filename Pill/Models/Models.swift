@@ -119,6 +119,24 @@ enum When: Codable {
         case .daysOfMonth(let days, _): return days
         }
     }
+    
+    var describe: String {
+        switch self {
+        case .once(let date):
+            let formattedDate = Dates.current.formatter().string(from: date)
+            return "\(formattedDate)"
+        case .daily(_, let time):
+            return "Daily at \(time.describe)"
+        case .monthly(_):
+            return "Monthly"
+        case .daysOfMonth(let days, _):
+            let str = days.map { i in
+                "\(i)"
+            }.joined(separator: ", ")
+            let word = days.count > 1 ? "Days" : "Day"
+            return "\(word) \(str) of month"
+        }
+    }
 }
 
 struct NthSpec: Codable {
@@ -136,11 +154,24 @@ enum Halt: Codable {
         }
     }
     
-    var nth: Int? {
+    var spec: NthSpec {
         switch self {
-        case .nthWeek(let spec): return spec.nth
-        case .nthMonth(let spec): return spec.nth
+        case .nthWeek(let spec): return spec
+        case .nthMonth(let spec): return spec
         }
+    }
+    
+    var nth: Int { spec.nth }
+    
+    var intervalWord: String {
+        switch self {
+        case .nthWeek(_): return "week"
+        case .nthMonth(_): return "month"
+        }
+    }
+    
+    var describe: String {
+        "every \(nth) \(intervalWord) starting \(spec.start.describe)"
     }
     
     func isHalted(date: Date) -> Bool {
@@ -224,11 +255,11 @@ struct MutableReminder {
             let potentialRange = range.compactMap { i in
                 cal.date(byAdding: .day, value: i, to: next)
             }
-            let potentialDays = potentialRange.filter({ date in
+            let potentialDays = potentialRange.filter { date in
                 selectedWeekDays.contains { day in
                     (try? WeekDay.gregorian(cal: cal, date: date) == day) ?? false
                 }
-            })
+            }
             let halt = asHalt()
             let batch = potentialDays.filter { date in
                 !(halt?.isHalted(date: date) ?? false)
@@ -342,7 +373,7 @@ struct Reminder: Codable, Identifiable {
     }
     
     func upcoming(from: Date, limit: Int) -> [Date] {
-        return mutable.upcoming(from: from, limit: limit)
+        mutable.upcoming(from: from, limit: limit)
     }
 }
 
