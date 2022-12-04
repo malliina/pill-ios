@@ -177,7 +177,7 @@ struct ReminderEdit: View {
 struct ReminderEdit_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ReminderEdit(reminder: RemindersStore.sampleReminders[0].mutable, isNew: true) { _ in
+            ReminderEdit(reminder: RemindersStore.sampleReminders[4].mutable, isNew: true) { _ in
                 
             } delete: { r in () }
         }
