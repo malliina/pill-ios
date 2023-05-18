@@ -1,28 +1,80 @@
-//
-//  ModelData.swift
-//  Pill
-//
-//  Created by Michael Skogberg on 25.9.2021.
-//
-
 import Foundation
+import UserNotifications
 
 class RemindersStore: ObservableObject {
     let log = LoggerFactory.shared.system(RemindersStore.self)
     static let current = RemindersStore()
     
     @Published var reminders: [Reminder] = []
+    @Published var upcomings: [Upcoming] = []
+    
+    var center: Notifications { Notifications.current }
     
     func load() async -> [Reminder] {
-        return await withCheckedContinuation { continuation in
+        await withCheckedContinuation { continuation in
             continuation.resume(returning: Pill.PillSettings.shared.reminders)
         }
+    }
+    
+    @MainActor
+    func refresh() async {
+        reminders = await load()
+        await refreshUpcomings()
+    }
+    
+    @MainActor
+    private func refreshUpcomings() async {
+        let slice = await list().prefix(10)
+        upcomings = Array(slice)
+        log.info("Refreshed upcomings, now got \(upcomings.count) upcoming alarms: \(upcomings.map({ $0.title }))")
     }
     
     func save(_ newReminders: [Reminder]) async {
         Pill.PillSettings.shared.reminders = newReminders
         log.info("Saved \(newReminders.count) reminders.")
-        await RemindersNotifications.current.resetAllNow()
+        await resetAllNow()
+        await refreshUpcomings()
+    }
+    
+    func resetAllNow() async {
+        await reset(reminders: await load(), from: Date.now)
+    }
+    
+    func list() async -> [Upcoming] {
+        let reqs = await center.center.pendingNotificationRequests()
+        return reqs.compactMap { req in
+            if let trigger = req.trigger as? UNCalendarNotificationTrigger,
+                let next = trigger.nextTriggerDate() {
+                log.info("Got \(req.content.title) pending")
+                let fmt = ReminderEdit.dateFormatter.string(from: next)
+                return Upcoming(id: "\(req.identifier)-\(req.content.title)-\(fmt)", title: req.content.title, next: next)
+            } else {
+                return nil
+            }
+        }.sorted { a, b in
+            a.next < b.next
+        }
+    }
+    
+    private func reset(reminders: [Reminder], from: Date) async {
+        center.center.removeAllPendingNotificationRequests()
+        await schedule(reminders: reminders, from: from)
+        PillSettings.shared.updateScheduling(when: from)
+    }
+    
+    private func schedule(reminders: [Reminder], from: Date, limit: Int = 64) async {
+        let sorted = reminders.flatMap { reminder in
+            return reminder.upcoming(from: from, limit: limit).map { date in
+                return DatedReminder(date: date, reminder: reminder)
+            }
+        }.sorted { dr1, dr2 in
+            dr1.date < dr2.date
+        }.prefix(limit)
+        for dr in sorted {
+            let reminder = dr.reminder
+            await center.scheduleOnce(title: reminder.name, body: "", at: dr.date.components)
+        }
+        log.info("Scheduled \(sorted.count) reminders.")
     }
     
     static let sampleReminders: [Reminder] = [

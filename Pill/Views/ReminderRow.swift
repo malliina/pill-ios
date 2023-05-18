@@ -1,10 +1,3 @@
-//
-//  ReminderRow.swift
-//  Pill
-//
-//  Created by Michael Skogberg on 25.9.2021.
-//
-
 import SwiftUI
 
 struct ReminderRow: View {

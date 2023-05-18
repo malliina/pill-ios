@@ -1,10 +1,3 @@
-//
-//  PillTests.swift
-//  PillTests
-//
-//  Created by Michael Skogberg on 25.9.2021.
-//
-
 import XCTest
 @testable import Pill
 

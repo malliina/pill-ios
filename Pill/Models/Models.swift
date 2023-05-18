@@ -1,10 +1,3 @@
-//
-//  Models.swift
-//  Pill
-//
-//  Created by Michael Skogberg on 25.9.2021.
-//
-
 import Foundation
 
 enum WeekDay: String, CaseIterable, Codable, Identifiable {
@@ -179,17 +172,19 @@ extension Date {
     }
     
     var components: DateComponents {
-        return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self)
+        Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self)
     }
 }
 
 struct MutableReminder {
+    static let logger = LoggerFactory.shared.system(MutableReminder.self)
+    var log: Logger { MutableReminder.logger }
 //    static let empty: MutableReminder = Reminder(id: UUID().uuidString, enabled: true, name: "", when: When.daily(WeekDay.allCases, Time(hour: 8, minute: 15)), halt: nil, start: Date()).mutable
     static func create() -> MutableReminder {
+        logger.info("Creating mutable")
         let reminder = Reminder(id: UUID().uuidString, enabled: true, name: "", when: When.once(Date().addingTimeInterval(300)), halt: nil, start: Date())
         return reminder.mutable
     }
-    let log = LoggerFactory.shared.system(MutableReminder.self)
     let id: String
     var enabled: Bool
     var name: String
@@ -321,6 +316,7 @@ struct MutableReminder {
 }
 
 struct Reminder: Codable, Identifiable {
+    static let log = LoggerFactory.shared.system(Reminder.self)
     let id: String
     let enabled: Bool
     let name: String
@@ -350,6 +346,15 @@ struct Reminders: Codable {
     let reminders: [Reminder]
 }
 
+struct Upcoming: Identifiable {
+    let id, title: String
+    let next: Date
+    
+    func nextFormatted() -> String {
+        ReminderEdit.dateFormatter.string(from: next)
+    }
+}
+
 struct Dates {
     static let current = Dates()
     
@@ -366,4 +371,9 @@ struct SchedulingTime: Codable {
     var asDate: Date {
         Date(timeIntervalSince1970: when)
     }
+}
+
+struct DatedReminder {
+    let date: Date
+    let reminder: Reminder
 }

@@ -1,10 +1,3 @@
-//
-//  ReminderEdit.swift
-//  Pill
-//
-//  Created by Michael Skogberg on 25.9.2021.
-//
-
 import SwiftUI
 
 extension HaltInterval {
@@ -42,11 +35,20 @@ struct ReminderEdit: View {
     let log = LoggerFactory.shared.system(ReminderEdit.self)
     @Environment(\.editMode) var editMode
     @Environment(\.dismiss) var dismiss
-    @State var reminder: MutableReminder
+    
+    @State var reminder: MutableReminder = MutableReminder.create()
     
     let isNew: Bool
     let onSave: (Reminder) -> Void
     let delete: (Reminder) -> Void
+    
+//    init(reminder: MutableReminder, isNew: Bool, onSave: @escaping (Reminder) -> Void, delete: @escaping (Reminder) -> Void) {
+//        self.reminder = reminder
+//        self.isNew = isNew
+//        self.onSave = onSave
+//        self.delete = delete
+//        log.info("Init ReminderEdit")
+//    }
     
     let calendar = Calendar.current
     var start: Date { reminder.start }

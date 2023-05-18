@@ -1,10 +1,3 @@
-//
-//  DaysOfMonthSelector.swift
-//  Pill
-//
-//  Created by Michael Skogberg on 17.10.2021.
-//
-
 import Foundation
 import SwiftUI
 
@@ -40,7 +33,7 @@ struct DaysOfMonthSelector: View {
                 Spacer()
             }.padding()
             List {
-                ForEach(0..<monthDays.count) { index in
+                ForEach(monthDays.indices, id: \.self) { index in
                     HStack {
                         Button(action: {
                             monthDays[index].isSelected = !monthDays[index].isSelected

@@ -1,10 +1,3 @@
-//
-//  PillSettings.swift
-//  Pill
-//
-//  Created by Michael Skogberg on 16.10.2021.
-//
-
 import Foundation
 
 enum PillError: LocalizedError {

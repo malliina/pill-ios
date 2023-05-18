@@ -1,10 +1,3 @@
-//
-//  WeekDaysSelector.swift
-//  Pill
-//
-//  Created by Michael Skogberg on 17.10.2021.
-//
-
 import Foundation
 import SwiftUI
 
@@ -36,7 +29,7 @@ struct WeekDaysSelector: View {
                 Spacer()
             }.padding()
             List {
-                ForEach(0..<weekDays.count) { index in
+                ForEach(weekDays.indices, id: \.self) { index in
                     HStack {
                         Button(action: {
                             weekDays[index].isSelected = !weekDays[index].isSelected

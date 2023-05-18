@@ -1,10 +1,3 @@
-//
-//  Log.swift
-//  Pill
-//
-//  Created by Michael Skogberg on 15.10.2021.
-//
-
 import Foundation
 import os.log
 

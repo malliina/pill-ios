@@ -1,10 +1,3 @@
-//
-//  Notifications.swift
-//  Pill
-//
-//  Created by Michael Skogberg on 15.10.2021.
-//
-
 import Foundation
 import UserNotifications
 import os.log
@@ -55,7 +48,7 @@ class Notifications: NSObject, UNUserNotificationCenterDelegate {
         do {
             try await center.add(request)
             self.log.info("Scheduled \(content.title) notification at \(date).")
-        } catch let error {
+        } catch {
             self.log.error("Failed to add notification request at \(date). \(error)")
         }
     }

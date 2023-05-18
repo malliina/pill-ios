@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  Pill
-//
-//  Created by Michael Skogberg on 25.9.2021.
-//
-
 import SwiftUI
 
 struct ReminderList: View {
@@ -15,8 +8,6 @@ struct ReminderList: View {
     @State private var isAddingNewView = false
     @Environment(\.scenePhase) private var scenePhase
     
-    let remindersStore = RemindersStore.current
-    
     func onAddNew() {
         isAddingNewView = true
     }
@@ -25,7 +16,7 @@ struct ReminderList: View {
         data.reminders.removeAll { elem in
             elem.id == r.id
         }
-        await remindersStore.save(data.reminders)
+        await data.save(data.reminders)
     }
     
     func versions() -> String? {
@@ -52,7 +43,7 @@ struct ReminderList: View {
                                 data.reminders[idx] = r
                             }
                             Task {
-                                await remindersStore.save(data.reminders)
+                                await data.save(data.reminders)
                             }
                         } delete: { r in Task { await onDelete(r) } }) {
                             ReminderRow(reminder: reminder)
@@ -62,15 +53,21 @@ struct ReminderList: View {
                             }
                         }
                     }
-                }.navigationTitle("PillAlarm")
-                
+                }
+                Label(data.upcomings.isEmpty ? "No upcoming reminders" : "Upcoming reminders", systemImage: "calendar")
+                    .font(.title3.bold())
+                List {
+                    ForEach(data.upcomings) { upcoming in
+                        Text("\(upcoming.title) at \(upcoming.nextFormatted())")
+                    }
+                }
                 if notificationsDenied {
                     Button("Notifications are denied. Please enable notifications for this app in system settings.") {
                         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                     }.padding()
                 }
                 Text(versions() ?? "").font(Font.system(size: 14))
-            }
+            }.navigationTitle("PillAlarm")
         }
         .navigationViewStyle(.stack)
         .sheet(isPresented: $isAddingNewView) {
@@ -79,7 +76,7 @@ struct ReminderList: View {
                     log.info("Save new \(r.name)")
                     data.reminders.append(r)
                     Task {
-                        await remindersStore.save(data.reminders)
+                        await data.save(data.reminders)
                     }
                 } delete: { r in log.info("Unused") }
                 .toolbar {
@@ -92,7 +89,7 @@ struct ReminderList: View {
             }
         }
         .task {
-            data.reminders = await remindersStore.load()
+            await data.refresh()
         }
         .onChange(of: scenePhase) { phase in
             log.info("Phase \(phase)")

@@ -1,17 +1,10 @@
-//
-//  PillApp.swift
-//  Pill
-//
-//  Created by Michael Skogberg on 25.9.2021.
-//
-
 import SwiftUI
 
 @main
 struct PillApp: App {
     static let log = LoggerFactory.shared.system(PillApp.self)
     
-    @StateObject private var store = RemindersStore()
+    @StateObject private var store = RemindersStore.current
     
     init() {
         Task {
@@ -21,7 +14,7 @@ struct PillApp: App {
                 threshold > Date.now {
                 PillApp.log.info("Scheduling is recent enough, will not schedule for now.")
             } else {
-                await RemindersNotifications.current.resetAllNow()
+                await RemindersStore.current.resetAllNow()
             }
         }
     }

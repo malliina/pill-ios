@@ -1,10 +1,3 @@
-//
-//  PillUITests.swift
-//  PillUITests
-//
-//  Created by Michael Skogberg on 25.9.2021.
-//
-
 import XCTest
 
 class PillUITests: XCTestCase {
