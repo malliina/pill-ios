@@ -20,6 +20,11 @@
 		7D20941E26FF68CB00F24FBD /* ReminderEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D20941D26FF68CB00F24FBD /* ReminderEdit.swift */; };
 		7D5996D52719E9710062FDAF /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5996D42719E9710062FDAF /* Notifications.swift */; };
 		7D5996D72719EB700062FDAF /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5996D62719EB700062FDAF /* Log.swift */; };
+<<<<<<< HEAD
+=======
+		7D6BF6E8281C5DB3007C5FD5 /* RemindersNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6BF6E7281C5DB3007C5FD5 /* RemindersNotifications.swift */; };
+		7DA7E6B028718F3600379577 /* ReminderBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA7E6AF28718F3600379577 /* ReminderBox.swift */; };
+>>>>>>> master
 		7DE6FFAE271B10C3009B77F0 /* PillSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6FFAD271B10C3009B77F0 /* PillSettings.swift */; };
 		7DE6FFB0271C4D3E009B77F0 /* WeekDaysSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6FFAF271C4D3E009B77F0 /* WeekDaysSelector.swift */; };
 		7DE6FFB2271C51AF009B77F0 /* DaysOfMonthSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6FFB1271C51AF009B77F0 /* DaysOfMonthSelector.swift */; };
@@ -61,6 +66,11 @@
 		7D20941D26FF68CB00F24FBD /* ReminderEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEdit.swift; sourceTree = "<group>"; };
 		7D5996D42719E9710062FDAF /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		7D5996D62719EB700062FDAF /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+<<<<<<< HEAD
+=======
+		7D6BF6E7281C5DB3007C5FD5 /* RemindersNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersNotifications.swift; sourceTree = "<group>"; };
+		7DA7E6AF28718F3600379577 /* ReminderBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderBox.swift; sourceTree = "<group>"; };
+>>>>>>> master
 		7DE6FFAD271B10C3009B77F0 /* PillSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillSettings.swift; sourceTree = "<group>"; };
 		7DE6FFAF271C4D3E009B77F0 /* WeekDaysSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDaysSelector.swift; sourceTree = "<group>"; };
 		7DE6FFB1271C51AF009B77F0 /* DaysOfMonthSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysOfMonthSelector.swift; sourceTree = "<group>"; };
@@ -170,6 +180,7 @@
 				7D2093ED26FF5DBC00F24FBD /* ReminderList.swift */,
 				7D20941B26FF65C700F24FBD /* ReminderRow.swift */,
 				7DE6FFAF271C4D3E009B77F0 /* WeekDaysSelector.swift */,
+				7DA7E6AF28718F3600379577 /* ReminderBox.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -318,6 +329,11 @@
 			files = (
 				7D20941726FF60CC00F24FBD /* Models.swift in Sources */,
 				7D5996D52719E9710062FDAF /* Notifications.swift in Sources */,
+<<<<<<< HEAD
+=======
+				7D6BF6E8281C5DB3007C5FD5 /* RemindersNotifications.swift in Sources */,
+				7DA7E6B028718F3600379577 /* ReminderBox.swift in Sources */,
+>>>>>>> master
 				7D20941C26FF65C700F24FBD /* ReminderRow.swift in Sources */,
 				7DE6FFB2271C51AF009B77F0 /* DaysOfMonthSelector.swift in Sources */,
 				7D20941926FF64A500F24FBD /* RemindersStore.swift in Sources */,
@@ -486,7 +502,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_ASSET_PATHS = "\"Pill/Preview Content\"";
 				DEVELOPMENT_TEAM = D2T2QC36Z9;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = D2T2QC36Z9;
@@ -502,10 +518,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.25;
+				MARKETING_VERSION = 1.2.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.skogberglabs.Pill;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+<<<<<<< HEAD
 				PROVISIONING_PROFILE_SPECIFIER = PillDistribution;
+=======
+				PROVISIONING_PROFILE_SPECIFIER = PillDistribution2023;
+>>>>>>> master
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = PillDistribution2023;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -520,7 +540,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_ASSET_PATHS = "\"Pill/Preview Content\"";
 				DEVELOPMENT_TEAM = D2T2QC36Z9;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = D2T2QC36Z9;
@@ -536,10 +556,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.25;
+				MARKETING_VERSION = 1.2.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.skogberglabs.Pill;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+<<<<<<< HEAD
 				PROVISIONING_PROFILE_SPECIFIER = PillDistribution;
+=======
+				PROVISIONING_PROFILE_SPECIFIER = PillDistribution2023;
+>>>>>>> master
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = PillDistribution2023;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -553,7 +577,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_TEAM = D2T2QC36Z9;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -562,7 +586,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.25;
+				MARKETING_VERSION = 1.2.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.skogberglabs.PillTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -578,7 +602,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_TEAM = D2T2QC36Z9;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -587,7 +611,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.25;
+				MARKETING_VERSION = 1.2.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.skogberglabs.PillTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -602,7 +626,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_TEAM = D2T2QC36Z9;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -610,7 +634,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.25;
+				MARKETING_VERSION = 1.2.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.skogberglabs.PillUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -625,7 +649,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_TEAM = D2T2QC36Z9;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -633,7 +657,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.25;
+				MARKETING_VERSION = 1.2.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.skogberglabs.PillUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;

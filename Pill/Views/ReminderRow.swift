@@ -5,31 +5,16 @@ struct ReminderRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(reminder.name).font(.title).foregroundColor(.primary)
-                Text(describe(reminder.when)).font(.subheadline).foregroundColor(.secondary)
+                Text(reminder.name)
+                    .font(.title)
+                    .foregroundColor(.primary)
+                Text(reminder.when.describe)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
             }
             Spacer()
         }
     }
-    
-    func describe(_ when: When) -> String {
-        switch when {
-        case .once(let date):
-            let formattedDate = Dates.current.formatter().string(from: date)
-            return "\(formattedDate)"
-        case .daily(_, let time):
-            return "Daily at \(time.describe)"
-        case .monthly(_):
-            return "Monthly"
-        case .daysOfMonth(let days, _):
-            let str = days.map { i in
-                "\(i)"
-            }.joined(separator: ", ")
-            let word = days.count > 1 ? "Days" : "Day"
-            return "\(word) \(str) of month"
-        }
-    }
-
 }
 
 struct ReminderRow_Previews: PreviewProvider {

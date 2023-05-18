@@ -26,11 +26,18 @@ class Notifications: NSObject, UNUserNotificationCenterDelegate {
                     log.info("Authorization to send notifications denied.")
                 }
                 return granted
-            } catch let error {
+            } catch {
                 log.error("Failed to request authorization to send notifications. \(error)")
                 return false
             }
-        default: return false
+        case .authorized:
+            return true
+        case .provisional:
+            return true
+        case .ephemeral:
+            return true
+        default:
+            return false
         }
     }
     
