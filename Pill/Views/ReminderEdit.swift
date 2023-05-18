@@ -42,14 +42,6 @@ struct ReminderEdit: View {
     let onSave: (Reminder) -> Void
     let delete: (Reminder) -> Void
     
-//    init(reminder: MutableReminder, isNew: Bool, onSave: @escaping (Reminder) -> Void, delete: @escaping (Reminder) -> Void) {
-//        self.reminder = reminder
-//        self.isNew = isNew
-//        self.onSave = onSave
-//        self.delete = delete
-//        log.info("Init ReminderEdit")
-//    }
-    
     let calendar = Calendar.current
     var start: Date { reminder.start }
     static let dateFormatter = Dates.current.formatter()

@@ -6,21 +6,14 @@ class RemindersStore: ObservableObject {
     static let current = RemindersStore()
     
     @Published var reminders: [Reminder] = []
-<<<<<<< HEAD
     @Published var upcomings: [Upcoming] = []
     
-    var center: Notifications { Notifications.current }
-    
-    func load() async -> [Reminder] {
-        await withCheckedContinuation { continuation in
-            continuation.resume(returning: Pill.PillSettings.shared.reminders)
-=======
+    var notifications: Notifications { Notifications.current }
     var settings: PillSettings { PillSettings.shared }
     
     func load() async -> [Reminder] {
         await withCheckedContinuation { continuation in
             continuation.resume(returning: settings.reminders)
->>>>>>> master
         }
     }
     
@@ -49,11 +42,10 @@ class RemindersStore: ObservableObject {
     }
     
     func list() async -> [Upcoming] {
-        let reqs = await center.center.pendingNotificationRequests()
+        let reqs = await notifications.center.pendingNotificationRequests()
         return reqs.compactMap { req in
             if let trigger = req.trigger as? UNCalendarNotificationTrigger,
                 let next = trigger.nextTriggerDate() {
-                log.info("Got \(req.content.title) pending")
                 let fmt = ReminderEdit.dateFormatter.string(from: next)
                 return Upcoming(id: "\(req.identifier)-\(req.content.title)-\(fmt)", title: req.content.title, next: next)
             } else {
@@ -65,7 +57,7 @@ class RemindersStore: ObservableObject {
     }
     
     private func reset(reminders: [Reminder], from: Date) async {
-        center.center.removeAllPendingNotificationRequests()
+        notifications.center.removeAllPendingNotificationRequests()
         await schedule(reminders: reminders, from: from)
         PillSettings.shared.updateScheduling(when: from)
     }
@@ -80,7 +72,7 @@ class RemindersStore: ObservableObject {
         }.prefix(limit)
         for dr in sorted {
             let reminder = dr.reminder
-            await center.scheduleOnce(title: reminder.name, body: "", at: dr.date.components)
+            await notifications.scheduleOnce(title: reminder.name, body: "", at: dr.date.components)
         }
         log.info("Scheduled \(sorted.count) reminders.")
     }

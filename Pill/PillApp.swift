@@ -16,7 +16,6 @@ struct PillApp: App {
             } else {
                 await RemindersStore.current.resetAllNow()
             }
-            // let upcoming = await RemindersNotifications.current.requests()
         }
     }
     

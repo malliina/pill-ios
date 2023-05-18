@@ -60,7 +60,7 @@ struct ReminderList: View {
                     ForEach(data.upcomings) { upcoming in
                         Text("\(upcoming.title) at \(upcoming.nextFormatted())")
                     }
-                }
+                }.listStyle(.plain)
                 if notificationsDenied {
                     Button("Notifications are denied. Please enable notifications for this app in system settings.") {
                         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
