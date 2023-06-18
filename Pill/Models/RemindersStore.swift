@@ -3,7 +3,6 @@ import UserNotifications
 
 class RemindersStore: ObservableObject {
     let log = LoggerFactory.shared.system(RemindersStore.self)
-    static let current = RemindersStore()
     
     @Published var reminders: [Reminder] = []
     @Published var upcomings: [Upcoming] = []

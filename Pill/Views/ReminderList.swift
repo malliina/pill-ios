@@ -32,6 +32,8 @@ struct ReminderList: View {
                 List {
                     Button(action: onAddNew) {
                         Label("Add Reminder", systemImage: "calendar.badge.plus")
+                            .font(.title3.bold())
+                            .padding(.vertical)
                     }
                     ForEach(data.reminders) { reminder in
                         NavigationLink(destination: ReminderEdit(reminder: reminder.mutable, isNew: false) { r in
@@ -53,10 +55,10 @@ struct ReminderList: View {
                             }
                         }
                     }
-                }
-                Label(data.upcomings.isEmpty ? "No upcoming reminders" : "Upcoming reminders", systemImage: "calendar")
-                    .font(.title3.bold())
-                List {
+                    Label(data.upcomings.isEmpty ? "No upcoming reminders" : "Upcoming reminders", systemImage: "calendar")
+                        .font(.title3.bold())
+                        .padding(.top, 24)
+                        .padding(.bottom, 8)
                     ForEach(data.upcomings) { upcoming in
                         Text("\(upcoming.title) at \(upcoming.nextFormatted())")
                     }
@@ -66,7 +68,9 @@ struct ReminderList: View {
                         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                     }.padding()
                 }
-                Text(versions() ?? "").font(Font.system(size: 14))
+                if let versionText = versions() {
+                    Text(versionText).font(Font.system(size: 14))
+                }
             }.navigationTitle("PillAlarm")
         }
         .navigationViewStyle(.stack)

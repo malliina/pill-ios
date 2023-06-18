@@ -120,12 +120,12 @@
 		7D2093EA26FF5DBC00F24FBD /* Pill */ = {
 			isa = PBXGroup;
 			children = (
-				7D5996D32718B0350062FDAF /* System */,
-				7D20941A26FF65AC00F24FBD /* Views */,
+				7D2093EF26FF5DBF00F24FBD /* Assets.xcassets */,
 				7D20941526FF60B200F24FBD /* Models */,
 				7D2093EB26FF5DBC00F24FBD /* PillApp.swift */,
-				7D2093EF26FF5DBF00F24FBD /* Assets.xcassets */,
 				7D2093F126FF5DBF00F24FBD /* Preview Content */,
+				7D5996D32718B0350062FDAF /* System */,
+				7D20941A26FF65AC00F24FBD /* Views */,
 			);
 			path = Pill;
 			sourceTree = "<group>";
@@ -488,12 +488,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_ASSET_PATHS = "\"Pill/Preview Content\"";
 				DEVELOPMENT_TEAM = D2T2QC36Z9;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = D2T2QC36Z9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -509,8 +508,7 @@
 				MARKETING_VERSION = 1.2.29;
 				PRODUCT_BUNDLE_IDENTIFIER = com.skogberglabs.Pill;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = PillDistribution2023;
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = PillDistribution2023;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -522,12 +520,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_ASSET_PATHS = "\"Pill/Preview Content\"";
 				DEVELOPMENT_TEAM = D2T2QC36Z9;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = D2T2QC36Z9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -543,8 +540,7 @@
 				MARKETING_VERSION = 1.2.29;
 				PRODUCT_BUNDLE_IDENTIFIER = com.skogberglabs.Pill;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = PillDistribution2023;
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = PillDistribution2023;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
