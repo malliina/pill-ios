@@ -114,9 +114,9 @@ struct ReminderList: View {
     }
 }
 
-struct ReminderList_Previews: PreviewProvider {
+struct ReminderListPreviews: PreviewProvider {
     static var previews: some View {
-        ForEach(["iPhone 12 mini", "iPad Pro (11-inch) (3rd generation)"], id: \.self) { deviceName in
+        ForEach(["iPhone 13 mini", "iPad Pro (11-inch) (3rd generation)"], id: \.self) { deviceName in
             ReminderList()
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)

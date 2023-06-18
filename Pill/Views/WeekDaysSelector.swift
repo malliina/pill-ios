@@ -49,7 +49,7 @@ struct WeekDaysSelector: View {
     }
 }
 
-struct WeekDaysSelector_Previews: PreviewProvider {
+struct WeekDaysSelectorPreviews: PreviewProvider {
     static let allSelected = WeekDay.allCases.map { weekDay in
         WeekDaySelection(day: weekDay, isSelected: true)
     }

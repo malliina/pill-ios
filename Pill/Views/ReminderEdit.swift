@@ -168,7 +168,7 @@ struct ReminderEdit: View {
     }
 }
 
-struct ReminderEdit_Previews: PreviewProvider {
+struct ReminderEditPreviews: PreviewProvider {
     static var previews: some View {
         Group {
             ReminderEdit(reminder: RemindersStore.sampleReminders[4].mutable, isNew: true) { _ in

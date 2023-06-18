@@ -53,7 +53,7 @@ struct DaysOfMonthSelector: View {
     }
 }
 
-struct DaysOfMonthSelector_Previews: PreviewProvider {
+struct DaysOfMonthSelectorPreviews: PreviewProvider {
     static let previewDays = (1...31).map { DayOfMonthSelection(day: $0, isSelected: false) }
     static var previews: some View {
         Group {

@@ -17,7 +17,7 @@ struct ReminderRow: View {
     }
 }
 
-struct ReminderRow_Previews: PreviewProvider {
+struct ReminderRowPreviews: PreviewProvider {
     static var reminders = RemindersStore.sampleReminders
     static var previews: some View {
         Group {

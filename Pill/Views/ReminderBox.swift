@@ -30,7 +30,7 @@ struct ReminderBox: View {
     }
 }
 
-struct ReminderBox_Previews: PreviewProvider {
+struct ReminderBoxPreviews: PreviewProvider {
     static var reminders = RemindersStore.sampleReminders
     static var previews: some View {
         Group {
