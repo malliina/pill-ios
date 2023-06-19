@@ -30,38 +30,42 @@ struct ReminderList: View {
         NavigationView {
             VStack {
                 List {
-                    Button(action: onAddNew) {
-                        Label("Add Reminder", systemImage: "calendar.badge.plus")
-                            .font(.title3.bold())
-                            .padding(.vertical)
-                    }
-                    ForEach(data.reminders) { reminder in
-                        NavigationLink(destination: ReminderEdit(reminder: reminder.mutable, isNew: false) { r in
-                            log.info("Save edited \(r.name).")
-                            let idx = data.reminders.firstIndex { rem in
-                                rem.id == r.id
-                            }
-                            if let idx = idx {
-                                data.reminders[idx] = r
-                            }
-                            Task {
-                                await data.save(data.reminders)
-                            }
-                        } delete: { r in Task { await onDelete(r) } }) {
-                            ReminderRow(reminder: reminder)
-                        }.swipeActions {
-                            Button(role: .destructive) { Task { await onDelete(reminder) } } label: {
-                                Label("Delete", systemImage: "trash")
+                    Section {
+                        Button(action: onAddNew) {
+                            Label("Add Reminder", systemImage: "calendar.badge.plus")
+                                .font(.title3.bold())
+                                .padding(.vertical)
+                        }
+                        ForEach(data.reminders) { reminder in
+                            NavigationLink(destination: ReminderEdit(reminder: reminder.mutable, isNew: false) { r in
+                                log.info("Save edited \(r.name).")
+                                let idx = data.reminders.firstIndex { rem in
+                                    rem.id == r.id
+                                }
+                                if let idx = idx {
+                                    data.reminders[idx] = r
+                                }
+                                Task {
+                                    await data.save(data.reminders)
+                                }
+                            } delete: { r in Task { await onDelete(r) } }) {
+                                ReminderRow(reminder: reminder)
+                            }.swipeActions {
+                                Button(role: .destructive) { Task { await onDelete(reminder) } } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
                             }
                         }
-                    }
-                    Label(data.upcomings.isEmpty ? "No upcoming reminders" : "Upcoming reminders", systemImage: "calendar")
-                        .font(.title3.bold())
-                        .padding(.top, 24)
-                        .padding(.bottom, 8)
-                    ForEach(data.upcomings) { upcoming in
-                        Text("\(upcoming.title) at \(upcoming.nextFormatted())")
-                    }
+                    }.listRowBackground(colors.primaryBackground)
+                    Section {
+                        Label(data.upcomings.isEmpty ? "No upcoming reminders" : "Upcoming reminders", systemImage: "calendar")
+                            .font(.title3.bold())
+                            .padding(.top, 24)
+                            .padding(.bottom, 8)
+                        ForEach(data.upcomings) { upcoming in
+                            Text("\(upcoming.title) at \(upcoming.nextFormatted())")
+                        }
+                    }.listRowBackground(colors.secondaryBackground)
                 }.listStyle(.plain)
                 if notificationsDenied {
                     Button("Notifications are denied. Please enable notifications for this app in system settings.") {
@@ -116,7 +120,7 @@ struct ReminderList: View {
 
 struct ReminderListPreviews: PreviewProvider {
     static var previews: some View {
-        ForEach(["iPhone 13 mini", "iPad Pro (11-inch) (3rd generation)"], id: \.self) { deviceName in
+        ForEach(["iPhone 13 mini", "iPad Pro (11-inch) (4th generation)"], id: \.self) { deviceName in
             ReminderList()
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)

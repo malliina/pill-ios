@@ -2,6 +2,7 @@ import XCTest
 @testable import Pill
 
 class PillTests: XCTestCase {
+    let log = LoggerFactory.shared.system(PillTests.self)
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -31,6 +32,17 @@ class PillTests: XCTestCase {
         XCTAssert(!halt.isHalted(date: inTwoWeeks))
         let inThreeWeeks = cal.date(byAdding: .day, value: 21, to: date) ?? date
         XCTAssert(halt.isHalted(date: inThreeWeeks))
+    }
+    
+    func testAddMonth() throws {
+        let cal = Calendar.current
+        var dateComponents = DateComponents()
+        dateComponents.year = 2022
+        dateComponents.month = 1
+        dateComponents.day = 31
+        let date = cal.date(from: dateComponents)!
+        let added = cal.date(byAdding: .month, value: 1, to: date)
+//        log.info("\(added)")
     }
 
     func testPerformanceExample() throws {
