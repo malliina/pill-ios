@@ -26,6 +26,7 @@
 		7DE6FFB2271C51AF009B77F0 /* DaysOfMonthSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6FFB1271C51AF009B77F0 /* DaysOfMonthSelector.swift */; };
 		7DE6FFB4271C7E2E009B77F0 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 7DE6FFB3271C7E2D009B77F0 /* README.md */; };
 		7DE6FFB6271C8119009B77F0 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 7DE6FFB5271C8119009B77F0 /* LICENSE */; };
+		B0366E682A7FDBB200DB320C /* MutableReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0366E672A7FDBB200DB320C /* MutableReminder.swift */; };
 		B09113072A40E36600D827C0 /* PillColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09113062A40E36600D827C0 /* PillColors.swift */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +70,7 @@
 		7DE6FFB1271C51AF009B77F0 /* DaysOfMonthSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysOfMonthSelector.swift; sourceTree = "<group>"; };
 		7DE6FFB3271C7E2D009B77F0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7DE6FFB5271C8119009B77F0 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		B0366E672A7FDBB200DB320C /* MutableReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableReminder.swift; sourceTree = "<group>"; };
 		B09113062A40E36600D827C0 /* PillColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillColors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -162,6 +164,7 @@
 			children = (
 				7D20941626FF60CC00F24FBD /* Models.swift */,
 				7D20941826FF64A500F24FBD /* RemindersStore.swift */,
+				B0366E672A7FDBB200DB320C /* MutableReminder.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				B09113072A40E36600D827C0 /* PillColors.swift in Sources */,
 				7D20941C26FF65C700F24FBD /* ReminderRow.swift in Sources */,
 				7DE6FFB2271C51AF009B77F0 /* DaysOfMonthSelector.swift in Sources */,
+				B0366E682A7FDBB200DB320C /* MutableReminder.swift in Sources */,
 				7D20941926FF64A500F24FBD /* RemindersStore.swift in Sources */,
 				7D20941E26FF68CB00F24FBD /* ReminderEdit.swift in Sources */,
 				7DE6FFB0271C4D3E009B77F0 /* WeekDaysSelector.swift in Sources */,

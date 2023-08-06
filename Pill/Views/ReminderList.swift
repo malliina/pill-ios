@@ -96,9 +96,6 @@ struct ReminderList: View {
                 }
             }
         }
-        .task {
-            await data.refresh()
-        }
         .onChange(of: scenePhase) { phase in
             log.info("Phase \(phase)")
             if phase == .inactive {
@@ -107,8 +104,10 @@ struct ReminderList: View {
             }
             if phase == .active {
                 Task {
+                    await data.refresh()
                     notificationsDenied = (await Notifications.current.settings().authorizationStatus) == .denied
                 }
+                
             }
         }
     }

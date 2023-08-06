@@ -33,11 +33,11 @@ class RemindersStore: ObservableObject {
         settings.reminders = newReminders
         log.info("Saved \(newReminders.count) reminders.")
         await resetAllNow()
-        await refreshUpcomings()
     }
     
     func resetAllNow() async {
         await reset(reminders: await load(), from: Date.now)
+        await refreshUpcomings()
     }
     
     func list() async -> [Upcoming] {
@@ -58,12 +58,13 @@ class RemindersStore: ObservableObject {
     private func reset(reminders: [Reminder], from: Date) async {
         notifications.center.removeAllPendingNotificationRequests()
         await schedule(reminders: reminders, from: from)
-        PillSettings.shared.updateScheduling(when: from)
+        settings.updateScheduling(when: from)
     }
     
     private func schedule(reminders: [Reminder], from: Date, limit: Int = 64) async {
+        log.info("Scheduling \(reminders.count) reminders...")
         let sorted = reminders.flatMap { reminder in
-            return reminder.upcoming(from: from, limit: limit).map { date in
+            return reminder.upcoming(now: from, limit: limit).map { date in
                 return DatedReminder(date: date, reminder: reminder)
             }
         }.sorted { dr1, dr2 in

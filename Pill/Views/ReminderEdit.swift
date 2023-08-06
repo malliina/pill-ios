@@ -58,7 +58,7 @@ struct ReminderEdit: View {
         }
     }
     var dateText: String { reminder.whenInterval == .none ? "Date" : "Starting" }
-    var upcoming: [Date] { reminder.upcoming(from: reminder.start, limit: 10) }
+    var upcoming: [Date] { reminder.upcoming(from: reminder.start, now: Date.now, limit: 10) }
     var describeWeekDays: String {
         let selected = reminder.selectedWeekDays
         if selected.isEmpty {
