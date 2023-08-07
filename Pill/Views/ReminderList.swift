@@ -56,7 +56,7 @@ struct ReminderList: View {
                                 }
                             }
                         }
-                    }.listRowBackground(colors.primaryBackground)
+                    }.listRowBackground(Color(uiColor: .systemBackground))
                     Section {
                         Label(data.upcomings.isEmpty ? "No upcoming reminders" : "Upcoming reminders", systemImage: "calendar")
                             .font(.title3.bold())
@@ -65,7 +65,9 @@ struct ReminderList: View {
                         ForEach(data.upcomings) { upcoming in
                             Text("\(upcoming.title) at \(upcoming.nextFormatted())")
                         }
-                    }.listRowBackground(colors.secondaryBackground)
+                    }
+//                    .listRowBackground(colors.secondaryBackground)
+                    .listRowBackground(Color(uiColor: .secondarySystemBackground))
                 }.listStyle(.plain)
                 if notificationsDenied {
                     Button("Notifications are denied. Please enable notifications for this app in system settings.") {

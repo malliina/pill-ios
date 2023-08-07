@@ -15,7 +15,6 @@ struct PillApp: App {
         } else {
             await store.resetAllNow()
         }
-//        await store.resetAllNow()
     }
     
     var body: some Scene {

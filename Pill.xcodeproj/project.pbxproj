@@ -173,12 +173,12 @@
 			isa = PBXGroup;
 			children = (
 				7DE6FFB1271C51AF009B77F0 /* DaysOfMonthSelector.swift */,
+				B09113062A40E36600D827C0 /* PillColors.swift */,
 				7DA7E6AF28718F3600379577 /* ReminderBox.swift */,
 				7D20941D26FF68CB00F24FBD /* ReminderEdit.swift */,
 				7D2093ED26FF5DBC00F24FBD /* ReminderList.swift */,
 				7D20941B26FF65C700F24FBD /* ReminderRow.swift */,
 				7DE6FFAF271C4D3E009B77F0 /* WeekDaysSelector.swift */,
-				B09113062A40E36600D827C0 /* PillColors.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
