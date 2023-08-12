@@ -29,7 +29,7 @@ struct MutableReminder {
         guard enabled else { return [] }
         let cal = Calendar.current
         let time = timeAsDate.time
-//        log.info("Start is \(start)")
+//        log.info("Start \(start) from \(from)")
         let startCandidate = cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from) ?? from
         let range = 0..<limit
         switch whenInterval {
@@ -101,6 +101,26 @@ struct MutableReminder {
             } else {
                 return batch
             }
+        case .lastDayOfMonth:
+//            let halt = asHalt()
+            let batch = range.compactMap { int in cal.date(byAdding: .day, value: int, to: startCandidate) }.filter { date in
+                isLastDayOfMonth(date) && date > now
+            }
+            if let nextFrom = cal.date(byAdding: .day, value: range.count, to: from), batch.count < limit {
+//                    log.info("Recurse after batch \(batch.count) remaining \(limit-batch.count) from \(mostDistant)")
+                return batch + upcoming(from: nextFrom, now: now, limit: limit - batch.count)
+            } else {
+                return batch
+            }
+        }
+    }
+    
+    func isLastDayOfMonth(_ date: Date) -> Bool {
+        guard let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: date) else { return false }
+        if let startMonth = date.components.month, let tomorrowMonth = nextDay.components.month, startMonth != tomorrowMonth {
+            return true
+        } else {
+            return false
         }
     }
     
@@ -116,20 +136,23 @@ struct MutableReminder {
     }
     
     func asWhen() -> When {
+        let time = timeAsDate.time
         switch whenInterval {
         case .none:
-            return .once(start.at(time: timeAsDate.time))
+            return .once(start.at(time: time))
         case .daily:
-            return .daily(selectedWeekDays, timeAsDate.time)
+            return .daily(selectedWeekDays, time)
         case .monthly:
-            return .monthly(timeAsDate.time)
+            return .monthly(time)
         case .daysOfMonth:
             let daysOfMonth = whenDaysOfMonth.filter({ dayOfMonth in
                 dayOfMonth.isSelected
             }).map({ dayOfMonth in
                 dayOfMonth.day
             })
-            return .daysOfMonth(daysOfMonth, timeAsDate.time)
+            return .daysOfMonth(daysOfMonth, time)
+        case .lastDayOfMonth:
+            return .lastDayOfMonth(time)
         }
     }
     

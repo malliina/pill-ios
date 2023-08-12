@@ -27,6 +27,7 @@ extension Interval {
         case .daily: return "daily"
         case .monthly: return "monthly"
         case .daysOfMonth: return "days of month"
+        case .lastDayOfMonth: return "last day of month"
         }
     }
 }
@@ -114,7 +115,7 @@ struct ReminderEdit: View {
                         Label(describeDaysOfMonth, systemImage: "calendar.badge.plus")
                     }
                 }
-                if reminder.whenInterval != .none {
+                if reminder.whenInterval != .none && reminder.whenInterval != .lastDayOfMonth {
                     Picker(selection: $reminder.haltInterval) {
                         ForEach(HaltInterval.allCases) { i in
                             Text(i.turnOffWord).tag(i)

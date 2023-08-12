@@ -50,11 +50,7 @@ struct Time: Codable {
 }
 
 enum Interval: String, CaseIterable, Codable, Identifiable {
-    case none
-    case daily
-//    case weekly
-    case monthly
-    case daysOfMonth
+    case none, daily, monthly, daysOfMonth, lastDayOfMonth
     
 //    var all: [Interval] { [Interval.none, Interval.daily, Interval.weekly, Interval.monthly] }
 //    var timed(at: Time): When {
@@ -78,7 +74,7 @@ enum HaltInterval: String, CaseIterable, Codable, Identifiable {
 }
 
 enum When: Codable {
-    case once(Date), daily([WeekDay], Time), monthly(Time), daysOfMonth([Int], Time)
+    case once(Date), daily([WeekDay], Time), monthly(Time), daysOfMonth([Int], Time), lastDayOfMonth(Time)
     
     var interval: Interval {
         switch self {
@@ -86,6 +82,7 @@ enum When: Codable {
         case .daily(_, _): return .daily
         case .monthly(_): return .monthly
         case .daysOfMonth(_, _): return .daysOfMonth
+        case .lastDayOfMonth(_): return .lastDayOfMonth
         }
     }
     var time: Time {
@@ -94,6 +91,7 @@ enum When: Codable {
         case .daily(_, let t): return t
         case .monthly(let t): return t
         case .daysOfMonth(_, let t): return t
+        case .lastDayOfMonth(let t): return t
         }
     }
     var weekDays: [WeekDay]? {
@@ -102,6 +100,7 @@ enum When: Codable {
         case .daily(let days, _): return days
         case .monthly(_): return nil
         case .daysOfMonth(_, _): return nil
+        case .lastDayOfMonth(_): return nil
         }
     }
     var monthDays: [Int]? {
@@ -110,6 +109,7 @@ enum When: Codable {
         case .daily(_, _): return nil
         case .monthly(_): return nil
         case .daysOfMonth(let days, _): return days
+        case .lastDayOfMonth(_): return nil
         }
     }
     
@@ -128,6 +128,8 @@ enum When: Codable {
             }.joined(separator: ", ")
             let word = days.count > 1 ? "Days" : "Day"
             return "\(word) \(str) of month"
+        case .lastDayOfMonth(let time):
+            return "Last day of month at \(time.describe)"
         }
     }
 }
@@ -241,6 +243,8 @@ struct Reminder: Codable, Identifiable {
             return cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: start)
         case .daysOfMonth:
             return cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from)
+        case .lastDayOfMonth:
+            return cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: start)
         }
     }
     
