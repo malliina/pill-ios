@@ -66,7 +66,6 @@ struct ReminderList: View {
                             Text("\(upcoming.title) at \(upcoming.nextFormatted())")
                         }
                     }
-//                    .listRowBackground(colors.secondaryBackground)
                     .listRowBackground(Color(uiColor: .secondarySystemBackground))
                 }.listStyle(.plain)
                 if notificationsDenied {
