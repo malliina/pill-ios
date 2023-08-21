@@ -29,7 +29,6 @@ struct MutableReminder {
         guard enabled else { return [] }
         let cal = Calendar.current
         let time = timeAsDate.time
-//        log.info("Start \(start) from \(from)")
         let startCandidate = cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from) ?? from
         let range = 0..<limit
         switch whenInterval {
@@ -53,7 +52,6 @@ struct MutableReminder {
                 !(halt?.isHalted(date: date) ?? false)
             }
             if let nextFrom = cal.date(byAdding: .day, value: limit, to: from), batch.count < limit {
-//                log.info("Recurse after batch \(batch.count) remaining \(limit-batch.count) from \(nextFrom)")
                 return batch + upcoming(from: nextFrom, now: now, limit: limit - batch.count)
             } else {
                 return batch
@@ -71,7 +69,6 @@ struct MutableReminder {
                     !(halt?.isHalted(date: date) ?? false)
                 }
                 if let nextFrom = cal.date(byAdding: .month, value: limit, to: from), batch.count < limit {
-//                    log.info("Recurse after batch \(batch.count) remaining \(limit-batch.count) from \(mostDistant)")
                     return batch + upcoming(from: nextFrom, now: now, limit: limit - batch.count)
                 } else {
                     return batch
@@ -96,18 +93,15 @@ struct MutableReminder {
                 !(halt?.isHalted(date: date) ?? false)
             }
             if let nextFrom = cal.date(byAdding: .day, value: limit, to: from), batch.count < limit {
-//                log.info("Recurse after batch \(batch.count) remaining \(limit-batch.count) from \(nextFrom)")
                 return batch + upcoming(from: nextFrom, now: now, limit: limit - batch.count)
             } else {
                 return batch
             }
         case .lastDayOfMonth:
-//            let halt = asHalt()
             let batch = range.compactMap { int in cal.date(byAdding: .day, value: int, to: startCandidate) }.filter { date in
                 isLastDayOfMonth(date) && date > now
             }
             if let nextFrom = cal.date(byAdding: .day, value: range.count, to: from), batch.count < limit {
-//                    log.info("Recurse after batch \(batch.count) remaining \(limit-batch.count) from \(mostDistant)")
                 return batch + upcoming(from: nextFrom, now: now, limit: limit - batch.count)
             } else {
                 return batch
