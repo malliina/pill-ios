@@ -3,7 +3,7 @@ import Foundation
 struct MutableReminder {
     static let logger = LoggerFactory.shared.system(MutableReminder.self)
     var log: Logger { MutableReminder.logger }
-//    static let empty: MutableReminder = Reminder(id: UUID().uuidString, enabled: true, name: "", when: When.daily(WeekDay.allCases, Time(hour: 8, minute: 15)), halt: nil, start: Date()).mutable
+
     static func create() -> MutableReminder {
         logger.info("Creating mutable")
         let reminder = Reminder(id: UUID().uuidString, enabled: true, name: "", when: When.once(Date.now.addingTimeInterval(300)), halt: nil, start: Date())
