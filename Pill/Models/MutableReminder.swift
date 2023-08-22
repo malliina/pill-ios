@@ -37,7 +37,7 @@ struct MutableReminder {
         case .daily:
             guard !selectedWeekDays.isEmpty else { return [] }
             let tomorrow = cal.date(byAdding: .day, value: 1, to: startCandidate) ?? from
-            // If equal, take next day, prob recursion
+            // If equal, take next day, prob recursion. Clarify this.
             let next = from < startCandidate ? startCandidate : tomorrow
             let potentialRange = range.compactMap { i in
                 cal.date(byAdding: .day, value: i, to: next)
