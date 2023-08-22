@@ -27,6 +27,7 @@
 		7DE6FFB4271C7E2E009B77F0 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 7DE6FFB3271C7E2D009B77F0 /* README.md */; };
 		7DE6FFB6271C8119009B77F0 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 7DE6FFB5271C8119009B77F0 /* LICENSE */; };
 		B0366E682A7FDBB200DB320C /* MutableReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0366E672A7FDBB200DB320C /* MutableReminder.swift */; };
+		B056A14E2A952DF7001E573B /* .github in Resources */ = {isa = PBXBuildFile; fileRef = B056A14D2A952DF7001E573B /* .github */; };
 		B09113072A40E36600D827C0 /* PillColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09113062A40E36600D827C0 /* PillColors.swift */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +72,7 @@
 		7DE6FFB3271C7E2D009B77F0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7DE6FFB5271C8119009B77F0 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		B0366E672A7FDBB200DB320C /* MutableReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableReminder.swift; sourceTree = "<group>"; };
+		B056A14D2A952DF7001E573B /* .github */ = {isa = PBXFileReference; lastKnownFileType = folder; path = .github; sourceTree = "<group>"; };
 		B09113062A40E36600D827C0 /* PillColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillColors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -102,6 +104,7 @@
 		7D2093DF26FF5DBC00F24FBD = {
 			isa = PBXGroup;
 			children = (
+				B056A14D2A952DF7001E573B /* .github */,
 				7DE6FFB5271C8119009B77F0 /* LICENSE */,
 				7DE6FFB3271C7E2D009B77F0 /* README.md */,
 				7D2093EA26FF5DBC00F24FBD /* Pill */,
@@ -301,6 +304,7 @@
 				7D2093F326FF5DBF00F24FBD /* Preview Assets.xcassets in Resources */,
 				7DE6FFB6271C8119009B77F0 /* LICENSE in Resources */,
 				7D2093F026FF5DBF00F24FBD /* Assets.xcassets in Resources */,
+				B056A14E2A952DF7001E573B /* .github in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
