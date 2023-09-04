@@ -52,16 +52,6 @@ struct Time: Codable {
 enum Interval: String, CaseIterable, Codable, Identifiable {
     case none, daily, monthly, daysOfMonth, lastDayOfMonth
     
-//    var all: [Interval] { [Interval.none, Interval.daily, Interval.weekly, Interval.monthly] }
-//    var timed(at: Time): When {
-//        switch self {
-//        case .none: When.
-//        case .daily: When.daily(at)
-//        case .weekly: When.weekly(WeekDay.mon, at)
-//        case .monthly: When.monthly(2, at)
-//        }
-//
-//    }
     
     var id: String { self.rawValue }
 }
