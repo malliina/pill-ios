@@ -108,7 +108,6 @@ struct ReminderList: View {
                     await data.refresh()
                     notificationsDenied = (await Notifications.current.settings().authorizationStatus) == .denied
                 }
-                
             }
         }
     }

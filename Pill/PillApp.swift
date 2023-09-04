@@ -19,9 +19,11 @@ struct PillApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ReminderList().environmentObject(store).task {
-                await reload()
-            }
+            ReminderList()
+                .environmentObject(store)
+                .task {
+                    await reload()
+                }
         }
     }
 }
