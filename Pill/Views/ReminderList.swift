@@ -8,6 +8,11 @@ struct ReminderList: View {
     @State private var isAddingNewView = false
     @Environment(\.scenePhase) private var scenePhase
     
+    init() {
+        // https://developer.apple.com/forums/thread/121162
+        UITextField.appearance().clearButtonMode = .whileEditing
+    }
+    
     func onAddNew() {
         isAddingNewView = true
     }
