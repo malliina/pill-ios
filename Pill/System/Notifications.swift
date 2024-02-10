@@ -42,7 +42,7 @@ class Notifications: NSObject, UNUserNotificationCenterDelegate {
     }
     
     func settings() async -> UNNotificationSettings {
-        return await center.notificationSettings()
+        await center.notificationSettings()
     }
     
     func scheduleOnce(title: String, body: String, at date: DateComponents) async {
@@ -51,6 +51,7 @@ class Notifications: NSObject, UNUserNotificationCenterDelegate {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
+        content.sound = .default
         let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
         do {
             try await center.add(request)
