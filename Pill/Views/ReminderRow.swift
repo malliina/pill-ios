@@ -8,7 +8,7 @@ struct ReminderRow: View {
         Text(reminder.name)
           .font(.title)
           .foregroundColor(.primary)
-        Text(reminder.when.describe)
+        Text(reminder.describe)
           .font(.subheadline)
           .foregroundColor(.secondary)
       }

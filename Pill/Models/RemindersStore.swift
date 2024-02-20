@@ -27,7 +27,7 @@ class RemindersStore: ObservableObject {
     let slice = await list().prefix(10)
     upcomings = Array(slice)
     log.info(
-      "Refreshed upcomings, now got \(upcomings.count) upcoming alarms: \(upcomings.map({ $0.title }))"
+      "Refreshed upcomings, now got \(upcomings.count) upcoming alarms: \(upcomings.map { $0.title })"
     )
   }
 

@@ -59,7 +59,7 @@ struct ReminderList: View {
                   Task { await onDelete(r) }
                 }
               ) {
-                ReminderRow(reminder: reminder)
+                ReminderBox(reminder: reminder)
               }.swipeActions {
                 Button(role: .destructive) {
                   Task { await onDelete(reminder) }

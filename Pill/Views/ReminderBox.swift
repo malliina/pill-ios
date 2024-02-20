@@ -1,11 +1,26 @@
 import SwiftUI
 
 extension Date {
-  var describe: String { Dates.current.formatter().string(from: self) }
+  var describe: String { Dates.current.dateOnly().string(from: self) }
 }
 
 struct ReminderBox: View {
   let reminder: Reminder
+  
+  var showStart: Bool {
+    return switch reminder.when {
+    case .once(_):
+      false
+    case .daily(_, _):
+      reminder.start > Date.now
+    case .monthly(_):
+      true
+    case .daysOfMonth(_, _):
+      reminder.start > Date.now
+    case .lastDayOfMonth(_):
+      reminder.start > Date.now
+    }
+  }
 
   var body: some View {
     HStack {
@@ -13,12 +28,14 @@ struct ReminderBox: View {
         Text(reminder.name)
           .font(.title)
           .foregroundColor(.primary)
-        Text(reminder.when.describe)
+        Text(reminder.describe)
           .font(.subheadline)
           .foregroundColor(.secondary)
-        Text("Starting \(reminder.start.describe)")
-          .font(.subheadline)
-          .foregroundColor(.secondary)
+        if showStart {
+          Text("Starting \(reminder.start.describe)")
+            .font(.subheadline)
+            .foregroundColor(.secondary)
+        }
         if let halt = reminder.halt {
           Text("Halted \(halt.describe)")
             .font(.subheadline)

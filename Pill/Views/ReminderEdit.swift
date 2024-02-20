@@ -2,19 +2,19 @@ import SwiftUI
 
 extension HaltInterval {
   var word: String {
-    switch self {
-    case .none: return "never"
-    case .nthWeek: return "week"
-    case .nthMonth: return "month"
+    return switch self {
+    case .none: "never"
+    case .nthWeek: "week"
+    case .nthMonth: "month"
     //        case .monthly: return "month"
     }
   }
 
   var turnOffWord: String {
-    switch self {
-    case .none: return "never"
-    case .nthWeek: return "weekly"
-    case .nthMonth: return "monthly"
+    return switch self {
+    case .none: "never"
+    case .nthWeek: "weekly"
+    case .nthMonth: "monthly"
     //        case .monthly: return "monthly"
     }
   }
@@ -22,12 +22,12 @@ extension HaltInterval {
 
 extension Interval {
   var word: String {
-    switch self {
-    case .none: return "never"
-    case .daily: return "daily or weekly"
-    case .monthly: return "monthly"
-    case .daysOfMonth: return "days of month"
-    case .lastDayOfMonth: return "last day of month"
+    return switch self {
+    case .none: "never"
+    case .daily: "daily or weekly"
+    case .monthly: "monthly"
+    case .daysOfMonth: "days of month"
+    case .lastDayOfMonth: "last day of month"
     }
   }
 }

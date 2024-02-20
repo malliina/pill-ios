@@ -5,7 +5,6 @@ struct MutableReminder {
   var log: Logger { MutableReminder.logger }
 
   static func create() -> MutableReminder {
-    logger.info("Creating mutable")
     let reminder = Reminder(
       id: UUID().uuidString, enabled: true, name: "",
       when: When.once(Date.now.addingTimeInterval(300)), halt: nil, start: Date())
@@ -135,13 +134,13 @@ struct MutableReminder {
   }
 
   func asHalt() -> Halt? {
-    switch haltInterval {
+    return switch haltInterval {
     case .none:
-      return nil
+      nil
     case .nthWeek:
-      return Halt.nthWeek(NthSpec(start: start, nth: haltNth))
+      Halt.nthWeek(NthSpec(start: start, nth: haltNth))
     case .nthMonth:
-      return Halt.nthMonth(NthSpec(start: start, nth: haltNth))
+      Halt.nthMonth(NthSpec(start: start, nth: haltNth))
     }
   }
 

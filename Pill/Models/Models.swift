@@ -11,27 +11,27 @@ enum WeekDay: String, CaseIterable, Codable, Identifiable {
 
   var id: String { self.rawValue }
   var short: String {
-    switch self {
-    case .mon: return "Mon"
-    case .tue: return "Tue"
-    case .wed: return "Wed"
-    case .thu: return "Thu"
-    case .fri: return "Fri"
-    case .sat: return "Sat"
-    case .sun: return "Sun"
+    return switch self {
+    case .mon: "Mon"
+    case .tue: "Tue"
+    case .wed: "Wed"
+    case .thu: "Thu"
+    case .fri: "Fri"
+    case .sat: "Sat"
+    case .sun: "Sun"
     }
   }
 
   // https://developer.apple.com/documentation/foundation/nsdatecomponents/1410442-weekday
   static func gregorian(cal: Calendar, date: Date) throws -> WeekDay {
-    switch cal.component(.weekday, from: date) {
-    case 1: return sun
-    case 2: return mon
-    case 3: return tue
-    case 4: return wed
-    case 5: return thu
-    case 6: return fri
-    case 7: return sat
+    return switch cal.component(.weekday, from: date) {
+    case 1: sun
+    case 2: mon
+    case 3: tue
+    case 4: wed
+    case 5: thu
+    case 6: fri
+    case 7: sat
     default: throw PillError.general("Invalid weekday value.")
     }
   }
@@ -70,39 +70,39 @@ enum When: Codable {
   case lastDayOfMonth(Time)
 
   var interval: Interval {
-    switch self {
-    case .once(_): return .none
-    case .daily(_, _): return .daily
-    case .monthly(_): return .monthly
-    case .daysOfMonth(_, _): return .daysOfMonth
-    case .lastDayOfMonth(_): return .lastDayOfMonth
+    return switch self {
+    case .once(_): .none
+    case .daily(_, _): .daily
+    case .monthly(_): .monthly
+    case .daysOfMonth(_, _):  .daysOfMonth
+    case .lastDayOfMonth(_): .lastDayOfMonth
     }
   }
   var time: Time {
-    switch self {
-    case .once(let date): return date.time
-    case .daily(_, let t): return t
-    case .monthly(let t): return t
-    case .daysOfMonth(_, let t): return t
-    case .lastDayOfMonth(let t): return t
+    return switch self {
+    case .once(let date): date.time
+    case .daily(_, let t): t
+    case .monthly(let t): t
+    case .daysOfMonth(_, let t): t
+    case .lastDayOfMonth(let t): t
     }
   }
   var weekDays: [WeekDay]? {
-    switch self {
-    case .once(_): return nil
-    case .daily(let days, _): return days
-    case .monthly(_): return nil
-    case .daysOfMonth(_, _): return nil
-    case .lastDayOfMonth(_): return nil
+    return switch self {
+    case .once(_): nil
+    case .daily(let days, _): days
+    case .monthly(_): nil
+    case .daysOfMonth(_, _): nil
+    case .lastDayOfMonth(_): nil
     }
   }
   var monthDays: [Int]? {
-    switch self {
-    case .once(_): return nil
-    case .daily(_, _): return nil
-    case .monthly(_): return nil
-    case .daysOfMonth(let days, _): return days
-    case .lastDayOfMonth(_): return nil
+    return switch self {
+    case .once(_): nil
+    case .daily(_, _): nil
+    case .monthly(_): nil
+    case .daysOfMonth(let days, _): days
+    case .lastDayOfMonth(_):  nil
     }
   }
 
@@ -111,10 +111,15 @@ enum When: Codable {
     case .once(let date):
       let formattedDate = Dates.current.formatter().string(from: date)
       return "\(formattedDate)"
-    case .daily(_, let time):
-      return "Daily at \(time.describe)"
-    case .monthly(_):
-      return "Monthly"
+    case .daily(let weekDays, let time):
+      if weekDays == WeekDay.allCases {
+        return "Daily at \(time.describe)"
+      } else {
+        let days = weekDays.map { $0.short }.joined(separator: ", ")
+        return "\(days) at \(time.describe)"
+      }
+    case .monthly(let time):
+      return "Monthly at \(time.describe)"
     case .daysOfMonth(let days, _):
       let str = days.map { i in
         "\(i)"
@@ -137,25 +142,25 @@ enum Halt: Codable {
   case nthMonth(NthSpec)
 
   var interval: HaltInterval {
-    switch self {
-    case .nthWeek(_): return .nthWeek
-    case .nthMonth(_): return .nthMonth
+    return switch self {
+    case .nthWeek(_): .nthWeek
+    case .nthMonth(_): .nthMonth
     }
   }
 
   var spec: NthSpec {
-    switch self {
-    case .nthWeek(let spec): return spec
-    case .nthMonth(let spec): return spec
+    return switch self {
+    case .nthWeek(let spec): spec
+    case .nthMonth(let spec): spec
     }
   }
 
   var nth: Int { spec.nth }
 
   var intervalWord: String {
-    switch self {
-    case .nthWeek(_): return "week"
-    case .nthMonth(_): return "month"
+    return switch self {
+    case .nthWeek(_): "week"
+    case .nthMonth(_): "month"
     }
   }
 
@@ -233,23 +238,27 @@ struct Reminder: Codable, Identifiable {
   private func initialFrom(from: Date) -> Date? {
     let cal = Calendar.current
     let time = when.time
-    switch when.interval {
+    return switch when.interval {
     case .none:
-      return cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: start)
+      cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: start)
     case .daily:
-      return cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from)
+      cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from)
     case .monthly:
-      return cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: start)
+      cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: start)
     case .daysOfMonth:
-      return cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from)
+      cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: from)
     case .lastDayOfMonth:
-      return cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: start)
+      cal.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: start)
     }
   }
 
   func upcoming(now: Date, limit: Int) -> [Date] {
     guard let initial = initialFrom(from: now) else { return [] }
     return mutable.upcoming(from: initial, now: now, limit: limit)
+  }
+  
+  var describe: String {
+    when.describe
   }
 }
 
@@ -273,6 +282,13 @@ struct Dates {
     let df = DateFormatter()
     df.dateStyle = .medium
     df.timeStyle = .medium
+    return df
+  }
+  
+  func dateOnly() -> DateFormatter {
+    let df = DateFormatter()
+    df.dateStyle = .medium
+    df.timeStyle = .none
     return df
   }
 }
