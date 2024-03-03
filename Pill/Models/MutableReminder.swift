@@ -56,12 +56,12 @@ struct MutableReminder {
       }
       let halt = asHalt()
       let batch = potentialDays.filter { date in
-        !(halt?.isHalted(date: date) ?? false)
+        !(halt?.isHalted(date: date) ?? false) && date > now
       }
-      if let nextFrom = cal.date(byAdding: .day, value: limit, to: from), batch.count < limit {
-        return batch + upcoming(from: nextFrom, now: now, limit: limit - batch.count)
+      return if let nextFrom = cal.date(byAdding: .day, value: limit, to: from), batch.count < limit {
+        batch + upcoming(from: nextFrom, now: now, limit: limit - batch.count)
       } else {
-        return batch
+        batch
       }
     case .monthly:
       if from > startCandidate {
@@ -75,12 +75,12 @@ struct MutableReminder {
         }
         let halt = asHalt()
         let batch = potentialMonths.filter { date in
-          !(halt?.isHalted(date: date) ?? false)
+          !(halt?.isHalted(date: date) ?? false) && date > now
         }
-        if let nextFrom = cal.date(byAdding: .month, value: limit, to: from), batch.count < limit {
-          return batch + upcoming(from: nextFrom, now: now, limit: limit - batch.count)
+        return if let nextFrom = cal.date(byAdding: .month, value: limit, to: from), batch.count < limit {
+          batch + upcoming(from: nextFrom, now: now, limit: limit - batch.count)
         } else {
-          return batch
+          batch
         }
       }
     case .daysOfMonth:
@@ -99,23 +99,23 @@ struct MutableReminder {
       }
       let halt = asHalt()
       let batch = potentialDays.filter { date in
-        !(halt?.isHalted(date: date) ?? false)
+        !(halt?.isHalted(date: date) ?? false) && date > now
       }
-      if let nextFrom = cal.date(byAdding: .day, value: limit, to: from), batch.count < limit {
-        return batch + upcoming(from: nextFrom, now: now, limit: limit - batch.count)
+      return if let nextFrom = cal.date(byAdding: .day, value: limit, to: from), batch.count < limit {
+        batch + upcoming(from: nextFrom, now: now, limit: limit - batch.count)
       } else {
-        return batch
+        batch
       }
     case .lastDayOfMonth:
       let batch = range.compactMap { int in cal.date(byAdding: .day, value: int, to: startCandidate)
       }.filter { date in
         isLastDayOfMonth(date) && date > now
       }
-      if let nextFrom = cal.date(byAdding: .day, value: range.count, to: from), batch.count < limit
+      return if let nextFrom = cal.date(byAdding: .day, value: range.count, to: from), batch.count < limit
       {
-        return batch + upcoming(from: nextFrom, now: now, limit: limit - batch.count)
+        batch + upcoming(from: nextFrom, now: now, limit: limit - batch.count)
       } else {
-        return batch
+        batch
       }
     }
   }
@@ -124,12 +124,12 @@ struct MutableReminder {
     guard let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: date) else {
       return false
     }
-    if let startMonth = date.components.month, let tomorrowMonth = nextDay.components.month,
+    return if let startMonth = date.components.month, let tomorrowMonth = nextDay.components.month,
       startMonth != tomorrowMonth
     {
-      return true
+      true
     } else {
-      return false
+      false
     }
   }
 

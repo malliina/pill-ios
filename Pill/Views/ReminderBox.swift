@@ -6,7 +6,7 @@ extension Date {
 
 struct ReminderBox: View {
   let reminder: Reminder
-  
+
   var showStart: Bool {
     return switch reminder.when {
     case .once(_):
