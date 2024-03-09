@@ -55,9 +55,9 @@ class Notifications: NSObject, UNUserNotificationCenterDelegate {
     let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
     do {
       try await center.add(request)
-      self.log.info("Scheduled \(content.title) notification at \(date).")
+      log.info("Scheduled \(content.title) notification at \(date).")
     } catch {
-      self.log.error("Failed to add notification request at \(date). \(error)")
+      log.error("Failed to add notification request at \(date). \(error)")
     }
   }
 }
